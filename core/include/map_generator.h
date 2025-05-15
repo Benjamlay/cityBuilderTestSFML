@@ -12,12 +12,12 @@ class map_generator : public sf::Drawable
 public:
 
 
-
-  void generate_map(std::array<sf::Sprite, 36> map);
+  void set_texture(sf::Texture texture);
+  void generate_map(std::array<tile, 36>& map, sf::RenderWindow& window);
 
   void draw(sf::RenderWindow& window);
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  std::array<tile, 36> get_map();
+  std::array<tile, 36>& get_map();
 
 private:
   int x_size = 6;
