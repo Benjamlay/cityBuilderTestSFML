@@ -25,7 +25,7 @@ void map_generator::generate_map(std::array<tile, 36>& map, sf::RenderWindow& wi
     for (int y = 0; y <= y_size; y++)
     {
       int idx = x * y_size + y;
-      //TODO: placer les tiles sur la map ?
+
 
       map[idx].getSprite().setPosition({static_cast<float>(x), static_cast<float>(y)});
       window.draw(map[idx]);
