@@ -8,16 +8,14 @@
 #include <SFML/Graphics.hpp>
 
 
-class Game
-{
-public:
 
-    Game();
+namespace game
+{
+
+    //Game();
     void run();
 
-private:
-    sf::RenderWindow _window;
-    sf::Texture grass_texture_;
+
 
 };
 

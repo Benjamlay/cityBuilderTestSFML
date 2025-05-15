@@ -5,8 +5,7 @@
 
 int main()
 {
-    Game game;
-    game.run();
+    game::run();
 
     return 0;
 }
