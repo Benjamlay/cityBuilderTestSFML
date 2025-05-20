@@ -7,22 +7,30 @@
 #include <array>
 #include "tile.h"
 
-class map_generator : public sf::Drawable
+constexpr int x_size = 30;
+constexpr int y_size = 30;
+constexpr int tile_count = x_size * y_size;
+
+
+class map_generator
 {
 public:
 
+  map_generator();
 
   void set_texture(sf::Texture texture);
   void generate_map(std::array<tile, 36>& map, sf::RenderWindow& window);
 
-  void draw(sf::RenderWindow& window);
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  std::array<tile, 36>& get_map();
+  //bool loadFromFile(const std::string& filename);
+
+  // void draw(sf::RenderWindow& window);
+  // void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  std::array<int, tile_count> get_map();
 
 private:
-  int x_size = 6;
-  int y_size = 6;
-  std::array<tile, 36> map;
+
+  std::array<int, tile_count> map;
+  //std::array<tile, 36> map;
 
 };
 #endif //MAPGENERATOR_H

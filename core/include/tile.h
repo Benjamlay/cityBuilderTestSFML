@@ -1,24 +1,19 @@
-﻿//
-// Created by benja on 15/05/2025.
-//
-
+﻿
 #ifndef TILE_H
 #define TILE_H
+
 #include <SFML/Graphics.hpp>
 
-class tile : public sf::Drawable
+class tile
 {
 public:
 
-  tile() = default;
-  tile(sf::Texture& grass_texture_);
+  tile(sf::Sprite sprite, sf::Texture& grass_texture_, sf::Vector2f position);
   sf::Sprite& getSprite();
-  //void setPosition(sf::Vector2<float> newPosition);
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void draw(sf::RenderWindow& window);
 
 private:
-
-  std::optional<sf::Sprite> sprite_;
+  sf::Sprite sprite_;
 };
 
 #endif //TILE_H

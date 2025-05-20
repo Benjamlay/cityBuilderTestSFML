@@ -11,12 +11,8 @@
 
 namespace game
 {
-
-    //Game();
     void run();
-
-
-
+    void HandleEvents();
 };
 
 
