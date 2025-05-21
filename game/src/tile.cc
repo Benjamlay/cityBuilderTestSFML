@@ -1,5 +1,4 @@
-﻿#include "tile.h"
-
+﻿#include "../include/tile.h"
 
 tile::tile(sf::Sprite sprite, sf::Texture& grass_texture_, sf::Vector2f position) : sprite_(sprite)
 {

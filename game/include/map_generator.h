@@ -5,6 +5,7 @@
 #ifndef MAPGENERATOR_H
 #define MAPGENERATOR_H
 #include <array>
+
 #include "tile.h"
 
 constexpr int x_size = 30;

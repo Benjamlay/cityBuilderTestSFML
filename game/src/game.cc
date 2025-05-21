@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "map_generator.h"
-#include "tile.h"
+#include "../include/map_generator.h"
+#include "../include/tile.h"
 
 namespace
 {
@@ -59,7 +59,7 @@ void game::run()
       _window.draw(v);
     }
 
-    _window.setView(view);
+    //_window.setView(view);
     _window.display();
     _window.clear();
 
@@ -85,7 +85,7 @@ void game::HandleEvents()
         lastMousePos = sf::Mouse::getPosition(_window);
       }
 
-     else if (const auto* MouseClick = event->getIf<sf::Event::MouseButtonReleased>())
+     if (const auto* MouseClick = event->getIf<sf::Event::MouseButtonReleased>())
       {
         if (MouseClick->button == sf::Mouse::Button::Left)
         {
@@ -94,7 +94,7 @@ void game::HandleEvents()
         }
       }
 
-      else if (event->is<sf::Event::MouseMoved>() && dragging)
+      if (event->is<sf::Event::MouseMoved>() && dragging)
       {
         sf::Vector2i currentMousePos = sf::Mouse::getPosition(_window);
         sf::Vector2f delta = _window.mapPixelToCoords(lastMousePos) - _window.mapPixelToCoords(currentMousePos);

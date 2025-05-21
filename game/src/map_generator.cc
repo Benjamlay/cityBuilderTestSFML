@@ -2,7 +2,7 @@
 // Created by benja on 15/05/2025.
 //
 
-#include "map_generator.h"
+#include "../include/map_generator.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
