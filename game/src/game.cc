@@ -2,49 +2,25 @@
 
 #include <iostream>
 
-#include "../include/map_generator.h"
-#include "../include/tile.h"
+
+#include "../include/tile_map.h"
 
 namespace
 {
   sf::RenderWindow _window;
-  sf::Texture grass_texture_;
-  std::vector<sf::RectangleShape> tile_map;
-    sf::Time time = sf::Time::Zero;
-   sf::View view = _window.getDefaultView();
+  sf::View view = _window.getDefaultView();
    bool dragging = false;
    sf::Vector2i lastMousePos;
+  TileMap tilemap_;
 
 }  // namespace
 
 
 static void Setup()
 {
-  _window.create(sf::VideoMode({1920, 1080}), "SFML window");
+  _window.create(sf::VideoMode({1280, 1080}), "SFML window");
 
-  if (!grass_texture_.loadFromFile("assets/grass.png"))
-  {
-    std::cout << "Failed to load grass.png" << std::endl;
-  }
-
-
-
-  for (int y = 0; y < y_size; y++)
-  {
-    for (int x = 0; x < x_size; x++)
-    {
-      sf::Vector2f pos(x * 32, y * 32);
-      tile_map.emplace_back(sf::RectangleShape({0, 0}));
-      tile_map.back().setSize({32, 32});
-      tile_map.back().setPosition(pos);
-      tile_map.back().setTexture(&grass_texture_);
-
-      // debug
-      tile_map.back().setOutlineThickness(1.0f);
-      tile_map.back().setOutlineColor(sf::Color::Black);
-
-    }
-  }
+  tilemap_.Setup();
 }
 
 void game::run()
@@ -54,14 +30,13 @@ void game::run()
   while (_window.isOpen())
   {
     HandleEvents();
-    for (auto& v : tile_map)
-    {
-      _window.draw(v);
-    }
 
     //_window.setView(view);
-    _window.display();
     _window.clear();
+
+    tilemap_.Draw(_window);
+
+    _window.display();
 
   }
 }
