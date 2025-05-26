@@ -31,11 +31,10 @@ void game::run()
   {
     HandleEvents();
 
-    //_window.setView(view);
     _window.clear();
 
     tilemap_.Draw(_window);
-
+    _window.setView(view);
     _window.display();
 
   }
@@ -52,20 +51,20 @@ void game::HandleEvents()
     }
 
 
-    else if (const auto* mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
+    if (const auto* mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
       if (mouseClick->button == sf::Mouse::Button::Left)
       {
         dragging = true;
-        std::cout << "Left button pressed" << std::endl;
         lastMousePos = sf::Mouse::getPosition(_window);
       }
-
-     if (const auto* MouseClick = event->getIf<sf::Event::MouseButtonReleased>())
+    }
+      if (const auto* mouseClick = event->getIf<sf::Event::MouseButtonReleased>())
       {
-        if (MouseClick->button == sf::Mouse::Button::Left)
+        if (mouseClick->button == sf::Mouse::Button::Left)
         {
           dragging = false;
-          std::cout << "Left button released" << std::endl;
+          //std::cout << "Left button released" << std::endl;
+          std::cout << "Left button pressed" << std::endl;
         }
       }
 
@@ -76,6 +75,14 @@ void game::HandleEvents()
         view.move(delta);
         lastMousePos = currentMousePos;
       }
+    if (const auto* wheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()) {
+      if (wheelScrolled->delta > 0) {
+        view.zoom(0.9f);
+      }
+      else {
+        view.zoom(1.1f);
+      }
     }
+
   }
 }

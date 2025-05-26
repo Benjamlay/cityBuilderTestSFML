@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 
-
+#include "_assets/asset_manager.h"
 
 constexpr int kWidth = 1600;
 constexpr int kHeight = 1280;
@@ -16,7 +16,10 @@ constexpr int kPixelStep = 16;
 class TileMap {
   enum class Tile {
     EMPTY,
-    GRASS
+    GRASS,
+    GRASS2,
+    WATER
+
 };
 
 private:
@@ -24,12 +27,16 @@ private:
   sf::Texture grass_texture_;
   sf::Texture default_texture_;
 
+  AssetManager<sf::Texture> textures;
+
   static sf::Vector2f ScreenPosition(int index);
   //static int Index(sf::Vector2f screenPosition);
 
 public:
+  explicit TileMap();
   void Setup();
-  void Draw(sf::RenderWindow &window) const;
+  void Draw(sf::RenderWindow &window);
+  Tile GetTileType(float value);
 
 };
 #endif //MAPGENERATOR_H
