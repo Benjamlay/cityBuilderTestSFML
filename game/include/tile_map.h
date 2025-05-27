@@ -14,7 +14,8 @@ constexpr int kHeight = 2000;
 constexpr int kPixelStep = 16;
 
 class TileMap {
-  enum class Tile {
+
+  enum Tile {
     EMPTY,
     GRASS,
     GRASS2,
@@ -38,7 +39,6 @@ public:
   void Setup();
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
-  float generateNoise(int x, int y);
 
 };
 #endif //MAPGENERATOR_H

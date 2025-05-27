@@ -54,9 +54,6 @@ TileMap::Tile TileMap::GetTileType(float value) {
     return Tile::EMPTY;
 }
 
-float TileMap::generateNoise(int x, int y) {
-  return (std::sin(x * 0.1f) + std::cos(y * 0.1f)) * 0.5f + 0.5f;
-}
 
 sf::Vector2f TileMap::ScreenPosition(const int index) {
   float x = ceil((index % (kWidth / kPixelStep)) * kPixelStep);
@@ -82,17 +79,6 @@ void TileMap::Setup(){
   //tiles_.fill(Tile::GRASS);
 
 
-  // for (int y = 0; y < kHeight/kPixelStep; ++y) {
-  //   for (int x = 0; x < kWidth/kPixelStep; ++x) {
-  //     float noiseValue = generateNoise(x, y);
-  //     std::size_t index = y * kWidth/kPixelStep + x;
-  //
-  //     if (noiseValue < 0.3f)
-  //       tiles_[index] = Tile::WATER;
-  //     else if (noiseValue < 0.6f)
-  //       tiles_[index] = Tile::GRASS;
-  //   }
-  // }
 
   Perlin perlin;
   std::vector<std::vector<float>> noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));

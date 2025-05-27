@@ -33,13 +33,26 @@ void game::run()
 
     _window.clear();
 
+    lastMousePos = sf::Mouse::getPosition(_window);
+
+    for (int i = 0; i <= kHeight/kPixelStep; i++) {
+      for (int j = 0; j <= kWidth/kPixelStep; j++)
+      {
+        sf::Vector2i index = sf::Vector2i(i+1, j+1);
+        if (index == lastMousePos) {
+          //hover is true
+          std::cout << "hover on" << std::endl;
+          //doesn't work because of the zoom dezoom thing i think
+        }
+      }
+    }
+    std::cout << lastMousePos.x << "." << lastMousePos.y << std::endl;
     tilemap_.Draw(_window);
     _window.setView(view);
     _window.display();
 
   }
 }
-
 
 
 void game::HandleEvents()
@@ -49,7 +62,6 @@ void game::HandleEvents()
     if (event->is<sf::Event::Closed>()) {
       _window.close();
     }
-
 
     if (const auto* mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
       if (mouseClick->button == sf::Mouse::Button::Left)
