@@ -7,11 +7,6 @@
 template <typename TAsset>
 class AssetManager {
 
-  enum class TextureIndex {
-    KDefault = 0,
-    kGrass = 1
-
-  }; //Pas bon l'enum
   std::string folder_;
   std::vector<TAsset> assets_;
   TAsset default_asset_;
@@ -36,6 +31,7 @@ void AssetManager<TAsset>::Load() {
   assets_.emplace_back(TAsset(folder_ + "empty.png"));
   assets_.emplace_back(TAsset(folder_ + "grass.png"));
   assets_.emplace_back(TAsset(folder_ + "grass2.png"));
+  assets_.emplace_back(TAsset(folder_ + "tileSand1.png"));
   assets_.emplace_back(TAsset(folder_ + "water.png"));
 }
 

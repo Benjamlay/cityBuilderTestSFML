@@ -63,8 +63,6 @@ void game::HandleEvents()
         if (mouseClick->button == sf::Mouse::Button::Left)
         {
           dragging = false;
-          //std::cout << "Left button released" << std::endl;
-          std::cout << "Left button pressed" << std::endl;
         }
       }
 

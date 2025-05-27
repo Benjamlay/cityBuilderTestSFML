@@ -10,21 +10,13 @@
 void TileMap::Draw(sf::RenderWindow &window) {
   int tileIndex = 0;
 
-  Perlin perlin;
-  std::vector<std::vector<float>> noiseMap(kHeight, std::vector<float>(kWidth));
-
-  for (int y = 0; y < kHeight; ++y) {
-    for (int x = 0; x < kWidth; ++x) {
-      float fx = static_cast<float>(x) / 20.f;
-      float fy = static_cast<float>(y) / 20.f;
-      float value = static_cast<float>(perlin.noise(fx, fy));
-      noiseMap[y][x] = value;
-      Tile tileType = GetTileType(value);
-    }
-  }
+  //std::vector<std::vector<float>> noiseMap(kHeight, std::vector<float>(kWidth));
 
   sf::Sprite sprite(textures.Get(0));
-  // sf::Sprite sprite(default_texture_);
+
+
+
+  //sf::Sprite sprite(default_texture_);
 
   for (auto element : tiles_) {
     if (element != Tile::EMPTY) {
@@ -36,8 +28,10 @@ void TileMap::Draw(sf::RenderWindow &window) {
           sprite.setTexture(textures.Get(2));
           break;
         case Tile::WATER:
-          sprite.setTexture(textures.Get(3));
+          sprite.setTexture(textures.Get(4));
           break;
+        case Tile::SAND:
+          sprite.setTexture(textures.Get(3));
         default:
           break;
       }
@@ -49,12 +43,19 @@ void TileMap::Draw(sf::RenderWindow &window) {
     tileIndex++;
   }
 }
-TileMap::Tile TileMap::GetTileType(float value)
-{
-  if (value < 0.3f) return Tile::WATER;
-  else if (value < 0.45f) return Tile::GRASS;
-  else if (value < 0.7f) return Tile::GRASS2;
-  else return Tile::EMPTY;
+TileMap::Tile TileMap::GetTileType(float value) {
+  if (value < 0.3f)
+    return Tile::WATER;
+  else if (value < 0.45f)
+    return Tile::GRASS;
+  else if (value < 0.7f)
+    return Tile::GRASS2;
+  else
+    return Tile::EMPTY;
+}
+
+float TileMap::generateNoise(int x, int y) {
+  return (std::sin(x * 0.1f) + std::cos(y * 0.1f)) * 0.5f + 0.5f;
 }
 
 sf::Vector2f TileMap::ScreenPosition(const int index) {
@@ -78,5 +79,42 @@ void TileMap::Setup(){
 
   textures.Load();
 
-  tiles_.fill(Tile::GRASS2);
+  //tiles_.fill(Tile::GRASS);
+
+
+  // for (int y = 0; y < kHeight/kPixelStep; ++y) {
+  //   for (int x = 0; x < kWidth/kPixelStep; ++x) {
+  //     float noiseValue = generateNoise(x, y);
+  //     std::size_t index = y * kWidth/kPixelStep + x;
+  //
+  //     if (noiseValue < 0.3f)
+  //       tiles_[index] = Tile::WATER;
+  //     else if (noiseValue < 0.6f)
+  //       tiles_[index] = Tile::GRASS;
+  //   }
+  // }
+
+  Perlin perlin;
+  std::vector<std::vector<float>> noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));
+
+  for (int y = 0; y < kHeight/kPixelStep; ++y) {
+    for (int x = 0; x < kWidth/kPixelStep; ++x) {
+      float fx = x / 20.f;
+      float fy = y / 20.f;
+      float value = static_cast<float>(perlin.noise(fx, fy));
+      noiseMap[y][x] = value;
+      std::size_t index = y * kWidth/kPixelStep + x;
+
+      if (value < 0.005f)
+        tiles_[index] = Tile::WATER;
+      else if (value < 0.6f)
+        tiles_[index] = Tile::SAND;
+      else if (value < 0.9f)
+        tiles_[index] = Tile::GRASS;
+      else
+        tiles_[index] = Tile::GRASS2;
+    }
+  }
+
 }
+

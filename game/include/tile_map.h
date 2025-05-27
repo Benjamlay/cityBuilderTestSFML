@@ -9,8 +9,8 @@
 
 #include "_assets/asset_manager.h"
 
-constexpr int kWidth = 1600;
-constexpr int kHeight = 1280;
+constexpr int kWidth = 2000;
+constexpr int kHeight = 2000;
 constexpr int kPixelStep = 16;
 
 class TileMap {
@@ -18,12 +18,13 @@ class TileMap {
     EMPTY,
     GRASS,
     GRASS2,
+    SAND,
     WATER
 
 };
 
 private:
-  std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_ = {};
+  std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_;
   sf::Texture grass_texture_;
   sf::Texture default_texture_;
 
@@ -37,6 +38,7 @@ public:
   void Setup();
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
+  float generateNoise(int x, int y);
 
 };
 #endif //MAPGENERATOR_H
