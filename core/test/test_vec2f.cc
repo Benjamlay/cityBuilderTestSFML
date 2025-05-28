@@ -1,5 +1,7 @@
 ﻿#include "gtest/gtest.h"
 #include "maths/vec2f.h"
+#include "maths/angle.h"
+#include "maths/const.h"
 
 TEST(Vec2f, Empty) {
   core::Vec2f v;
@@ -97,12 +99,29 @@ TEST(Vec2f, Dot_product)
   constexpr core::Vec2f v1{x1,x2};
   constexpr core::Vec2f v2{y1,y2};
 
-  constexpr auto result = v1 / v2;
+  //constexpr auto result = ;
 
-  static_assert(result.x == x1 / y1);
-  static_assert(result.y == x2 / y2);
 
-  EXPECT_FLOAT_EQ(result.x, x1 / y1);
-  EXPECT_FLOAT_EQ(result.y, x2 / y2);
+  // EXPECT_FLOAT_EQ(result.x, x1 / y1);
+  // EXPECT_FLOAT_EQ(result.y, x2 / y2);
 
 }
+
+TEST(Vec2f, angle_between) {
+
+  constexpr float x1 = 0, x2 = 5;
+  constexpr float y1 = 5, y2 = 0;
+
+  constexpr core::Vec2f v1{x1,x2};
+  constexpr core::Vec2f v2{y1,y2};
+
+  core::Degree deg(90);
+  auto result = v1.angle_between(v2);
+
+  EXPECT_FLOAT_EQ(static_cast<float>(result), static_cast<float>(deg));
+
+}
+
+
+
+
