@@ -122,6 +122,21 @@ TEST(Vec2f, angle_between) {
 
 }
 
+TEST(Vec2f, Rotate) {
+
+  float x1 = 0, x2 = 5;
+  float y1 = 5, y2 = 0;
+
+  core::Vec2f v1{x1,x2};
+  core::Vec2f v2{y1,y2};
+
+  core::Degree deg(90);
+  v1.Rotate(deg);
+
+  EXPECT_NEAR(v1.x, v2.x, 0.1);
+  EXPECT_NEAR(v1.y, v2.y, 0.1);
+}
+
 
 
 

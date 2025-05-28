@@ -23,6 +23,10 @@ public:
   explicit constexpr operator float() const {
     return value_;
   }
+ constexpr Degree operator+=(const Degree& angle) const
+  {
+    return Degree(value_ + angle.value_);
+  }
 
 private:
   float value_;
