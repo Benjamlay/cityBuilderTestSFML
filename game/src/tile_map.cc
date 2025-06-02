@@ -75,7 +75,8 @@ void TileMap::Setup(){
   // grass_texture_.loadFromFile("../assets/textures/grass.png");
   // default_texture_.loadFromFile("../assets/textures/empty.png");
 
-  textures.Load();
+  //textures.Load();
+  textures.Load_All();
 
   //tiles_.fill(Tile::GRASS);
 
