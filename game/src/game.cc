@@ -46,6 +46,10 @@ void game::run()
         }
       }
     }
+
+    npc.Update();
+
+    //update graphic
     tilemap_.Draw(_window);
     npc.Draw(_window);
     _window.setView(view);
