@@ -4,23 +4,26 @@
 
 
 #include "../include/tile_map.h"
+#include "npc.h"
 
 namespace
 {
   sf::RenderWindow _window;
   sf::View view = _window.getDefaultView();
-   bool dragging = false;
-   sf::Vector2i lastMousePos;
+  bool dragging = false;
+  sf::Vector2i lastMousePos;
   TileMap tilemap_;
+  Npc npc;
 
 }  // namespace
 
 
 static void Setup()
 {
-  _window.create(sf::VideoMode({1280, 1280}), "SFML window");
+  _window.create(sf::VideoMode({1000, 1000}), "SFML window");
 
   tilemap_.Setup();
+  npc.Setup();
 }
 
 void game::run()
@@ -40,14 +43,11 @@ void game::run()
       {
         sf::Vector2i index = sf::Vector2i(i+1, j+1);
         if (index == lastMousePos) {
-          //hover is true
-          std::cout << "hover on" << std::endl;
-          //doesn't work because of the zoom dezoom thing i think
         }
       }
     }
-    std::cout << lastMousePos.x << "." << lastMousePos.y << std::endl;
     tilemap_.Draw(_window);
+    npc.Draw(_window);
     _window.setView(view);
     _window.display();
 

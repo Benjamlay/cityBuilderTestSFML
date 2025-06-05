@@ -10,14 +10,11 @@
 void TileMap::Draw(sf::RenderWindow &window) {
   int tileIndex = 0;
 
-  //std::vector<std::vector<float>> noiseMap(kHeight, std::vector<float>(kWidth));
-
-  //sf::Sprite sprite(textures.Get(0));
   sf::Sprite sprite(textures.GetTexture("empty"));
 
 
 
-  //sf::Sprite sprite(default_texture_);
+
 
   for (auto element : tiles_) {
     if (element != Tile::EMPTY) {
@@ -60,27 +57,18 @@ sf::Vector2f TileMap::ScreenPosition(const int index) {
   float x = ceil((index % (kWidth / kPixelStep)) * kPixelStep);
   float y = ceil((index / (kWidth / kPixelStep)) * kPixelStep);
 
-  // std::cout << "Calculated Screen Position : " << x << "." << y << "\n";
+
 
   return {x, y};
 }
 TileMap::TileMap() : textures("../assets/textures/") {}
 
-// int TileMap::Index(const sf::Vector2f screenPosition){
-//   return static_cast<int>(ceil(screenPosition.y / kPixelStep * kWidth)) + static_cast<int>(ceil(screenPosition.x / kPixelStep));
-// }
 
 void TileMap::Setup(){
 
-  // grass_texture_.loadFromFile("../assets/textures/grass.png");
-  // default_texture_.loadFromFile("../assets/textures/empty.png");
 
-  //textures.Load();
+
   textures.Load_All();
-
-  //tiles_.fill(Tile::GRASS);
-
-
 
   Perlin perlin;
   std::vector<std::vector<float>> noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));

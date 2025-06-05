@@ -26,8 +26,8 @@ class TileMap {
 
 private:
   std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_;
-  sf::Texture grass_texture_;
-  sf::Texture default_texture_;
+  // sf::Texture grass_texture_;
+  // sf::Texture default_texture_;
 
   AssetManager<sf::Texture> textures;
 

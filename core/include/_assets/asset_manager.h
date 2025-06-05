@@ -8,12 +8,13 @@
 template <typename TAsset>
 class AssetManager {
 
-  std::string folder_;
   std::vector<TAsset> assets_;
   std::unordered_map<std::string, TAsset> all_assets_;
   TAsset default_asset_;
 
 public :
+
+  std::string folder_;
   explicit AssetManager(std::string folder);
   void Load();
   void Load(const std::string& name, const std::string& path);
