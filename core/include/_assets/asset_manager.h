@@ -16,10 +16,10 @@ class AssetManager {
 public :
   explicit AssetManager(std::string folder);
   void Load();
-  void Load(std::string& name, std::string& path);
+  void Load(const std::string& name, const std::string& path);
   void Load_All();
   const TAsset& Get(int index);
-  const TAsset& GetTexture(const std::string name);
+  const TAsset& GetTexture(std::string name);
 
 };
 
@@ -41,10 +41,13 @@ void AssetManager<TAsset>::Load() {
 }
 
 template <typename TAsset>
-void AssetManager<TAsset>::Load(std::string& name, std::string& path)
+void AssetManager<TAsset>::Load(const std::string& name, const std::string& path)
 {
+  if (!std::filesystem::exists(folder_)) {
+    return;
+  }
   TAsset asset;
-  if (!asset.LoadFromFile(path)) {
+  if (!asset.loadFromFile(path)) {
     std::cerr << "Failed to load asset: " << path << std::endl;
     return;
   }
@@ -54,11 +57,11 @@ void AssetManager<TAsset>::Load(std::string& name, std::string& path)
 template <typename TAsset>
 void AssetManager<TAsset>::Load_All()
 {
-  Load("empty", TAsset(folder_ + "empty.png"));
-  Load("grass", TAsset(folder_ + "grass.png"));
-  Load("grass2", TAsset(folder_ + "grass2.png"));
-  Load("tileSand", TAsset(folder_ + "tileSand1.png"));
-  Load("water", TAsset(folder_ + "water.png"));
+  Load("empty", folder_ + "empty.png");
+  Load("grass", folder_ + "grass.png");
+  Load("grass2",folder_ + "grass2.png");
+  Load("tileSand",folder_ + "tileSand1.png");
+  Load("water", folder_ + "water.png");
 }
 
 

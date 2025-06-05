@@ -13,7 +13,7 @@ void TileMap::Draw(sf::RenderWindow &window) {
   //std::vector<std::vector<float>> noiseMap(kHeight, std::vector<float>(kWidth));
 
   //sf::Sprite sprite(textures.Get(0));
-  sf::Sprite sprite(textures.GetTexture("empty.png"));
+  sf::Sprite sprite(textures.GetTexture("empty"));
 
 
 
@@ -23,16 +23,16 @@ void TileMap::Draw(sf::RenderWindow &window) {
     if (element != Tile::EMPTY) {
       switch (element) {
         case Tile::GRASS:
-          sprite.setTexture(textures.GetTexture("grass.png"));
+          sprite.setTexture(textures.GetTexture("grass"));
           break;
         case Tile::GRASS2:
-          sprite.setTexture(textures.GetTexture("grass2.png"));
+          sprite.setTexture(textures.GetTexture("grass2"));
           break;
         case Tile::WATER:
-          sprite.setTexture(textures.GetTexture("water.png"));
+          sprite.setTexture(textures.GetTexture("water"));
           break;
         case Tile::SAND:
-          sprite.setTexture(textures.GetTexture("tileSand1.png"));
+          sprite.setTexture(textures.GetTexture("tileSand"));
         default:
           break;
       }

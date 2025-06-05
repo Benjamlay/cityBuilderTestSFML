@@ -18,7 +18,7 @@ namespace
 
 static void Setup()
 {
-  _window.create(sf::VideoMode({1280, 1080}), "SFML window");
+  _window.create(sf::VideoMode({1280, 1280}), "SFML window");
 
   tilemap_.Setup();
 }
