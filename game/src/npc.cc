@@ -12,7 +12,7 @@ void Npc::Setup()
 {
   textures.Load("guy", textures.folder_ + "guy.png");
   root_ = std::make_unique<Action>([] () {
-        std::cout << "I'm moving" << std::endl;
+        //std::cout << "I'm moving" << std::endl;
         return Status::kSuccess;
     });
 }

@@ -1,20 +1,14 @@
-﻿#include <SFML/Graphics/RenderWindow.hpp>
-
+﻿#include <SFML/Graphics.hpp>
 #include "../include/tile_map.h"
 #include "maths/perlin.h"
 #include <vector>
 
-
-
-
-void TileMap::Draw(sf::RenderWindow &window) {
+void TileMap::Draw(sf::RenderWindow &window)
+{
   int tileIndex = 0;
+  int resourceTileIndex = 0;
 
   sf::Sprite sprite(textures.GetTexture("empty"));
-
-
-
-
 
   for (auto element : tiles_) {
     if (element != Tile::EMPTY) {
@@ -33,13 +27,32 @@ void TileMap::Draw(sf::RenderWindow &window) {
         default:
           break;
       }
-
       sprite.setPosition(ScreenPosition(tileIndex));
       window.draw(sprite);
     }
-
     tileIndex++;
   }
+
+  sf::Sprite resourceSprite(textures.GetTexture("empty"));
+
+  for (auto element : resources_) {
+    if (element != resourceType::EMPTY) {
+      switch (element) {
+        case resourceType::ROCK:
+          resourceSprite.setTexture(textures.GetTexture("rock"));
+          break;
+        case resourceType::TREE:
+          resourceSprite.setTexture(textures.GetTexture("tree"));
+          break;
+        default:
+           break;
+      }
+      resourceSprite.setPosition(ScreenPosition(resourceTileIndex));
+      window.draw(resourceSprite);
+    }
+    resourceTileIndex++;
+  }
+
 }
 TileMap::Tile TileMap::GetTileType(float value) {
   if (value < 0.3f)
@@ -89,6 +102,12 @@ void TileMap::Setup(){
         tiles_[index] = Tile::GRASS;
       else
         tiles_[index] = Tile::GRASS2;
+
+      if (value > 0.95f) {
+        resources_[index] = resourceType::TREE;
+      }
+      else
+        resources_[index] = resourceType::EMPTY;
     }
   }
 

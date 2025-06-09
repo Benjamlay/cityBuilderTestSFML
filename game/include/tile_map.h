@@ -15,7 +15,7 @@ constexpr int kPixelStep = 16;
 
 class TileMap {
 
-  enum Tile {
+  enum class Tile {
     EMPTY,
     GRASS,
     GRASS2,
@@ -23,16 +23,19 @@ class TileMap {
     WATER
 
 };
+  enum class resourceType {
+    EMPTY,
+    TREE,
+    ROCK
 
-private:
+  };
+
   std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_;
-  // sf::Texture grass_texture_;
-  // sf::Texture default_texture_;
+  std::array<resourceType, kWidth/kPixelStep * kHeight/kPixelStep> resources_;
 
   AssetManager<sf::Texture> textures;
 
   static sf::Vector2f ScreenPosition(int index);
-  //static int Index(sf::Vector2f screenPosition);
 
 public:
   explicit TileMap();
