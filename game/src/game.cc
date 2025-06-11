@@ -10,6 +10,8 @@ namespace
   sf::Vector2i lastMousePos;
   TileMap tilemap_;
   Npc npc;
+  float dt;
+  sf::Clock clock_;
 
 }  // namespace
 
@@ -20,6 +22,7 @@ static void Setup()
 
   tilemap_.Setup();
   npc.Setup();
+  dt = 0.f;
 }
 
 void game::run()
@@ -28,6 +31,8 @@ void game::run()
 
   while (_window.isOpen())
   {
+    dt = clock_.restart().asSeconds();
+
     HandleEvents();
 
     _window.clear();
@@ -43,7 +48,7 @@ void game::run()
       }
     }
 
-    npc.Update();
+    npc.Update(dt);
 
     //update graphic
     tilemap_.Draw(_window);
