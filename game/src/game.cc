@@ -1,8 +1,4 @@
 ﻿#include "../include/game.h"
-
-#include <iostream>
-
-
 #include "../include/tile_map.h"
 #include "npc.h"
 

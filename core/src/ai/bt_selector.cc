@@ -1,11 +1,6 @@
 ﻿#include "ai/bt_selector.h"
 using namespace core::ai::behaviour_tree;
 
-void Selector::AddChild(std::unique_ptr<Node> child)
-{
-  children_.push_back(std::move(child));
-}
-
 void Selector::Reset()
 {
     childIdx = 0;
