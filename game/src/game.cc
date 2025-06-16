@@ -39,6 +39,7 @@ void game::run()
     _window.clear();
 
 
+
     npc.Update(dt);
 
 

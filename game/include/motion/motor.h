@@ -10,7 +10,7 @@ namespace core::motion {
   class motor {
 
     sf::Vector2f position_;
-    sf::Vector2f destination_ = {0.f, 0.f};
+    sf::Vector2f destination_;
     float speed_;
     float remaining_distance_ = 0;
 

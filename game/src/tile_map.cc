@@ -91,32 +91,34 @@ void TileMap::Setup() {
       float value = static_cast<float>(perlin.noise(fx, fy));
       noiseMap[y][x] = value;
       std::size_t index = y * kWidth/kPixelStep + x;
-      sf::Vector2f pos = ScreenPosition(value);
-      if (value < 0.005f)
-        tiles_[index] = Tile::WATER;
-      else if (value < 0.6f)
-        tiles_[index] = Tile::SAND;
-      else if (value < 0.9f)
-        tiles_[index] = Tile::GRASS;
+
+      sf::Vector2f pos = ScreenPosition(static_cast<int>(index));
+      if (value < 0.01f)
+        {tiles_[index] = Tile::WATER;}
+      else if (value < 0.3f)
+        {tiles_[index] = Tile::SAND;}
+      else if (value < 0.8f)
+        {tiles_[index] = Tile::GRASS;}
       else
-        tiles_[index] = Tile::GRASS2;
+        {tiles_[index] = Tile::GRASS2;}
 
       if (value > 0.95f) {
         resources_[index] = resourceType::TREE;
       }
-      else
+      else {
         resources_[index] = resourceType::EMPTY;
+      }
+      if (value > 0.01f) {
+        walkables_.push_back(pos);
+      }
     }
   }
 
+    std::cout << walkables_.size() << std::endl;
 
-  int idx = 0;
-  for (const auto& tile : tiles_) {
-    if (tile == Tile::GRASS || tile == Tile::GRASS2 || tile == Tile::SAND || tile == Tile::WATER) /*TODO : enlever le tile::WATER */{
-      walkables_.push_back(ScreenPosition(idx));
-    }
-    ++idx;
-  }
+
+
+
 }
 
 std::vector<sf::Vector2f> TileMap::GetWalkables() const {
