@@ -7,6 +7,7 @@
 #include "ai/bt_selector.h"
 #include "motion/motor.h"
 #include "motion/path.h"
+#include "tile_map.h"
 
 using namespace core::ai::behaviour_tree;
 using namespace core::motion;
@@ -18,19 +19,31 @@ class Npc {
   std::unique_ptr<Node> root_;
 
   motor motor_;
+  Path path_;
+
+  const TileMap* tileMap_;
+
+  static constexpr float kHungerRate = 0.1f;
+  static constexpr float kMovingSpeed = 50.0f;
+
+  //TileMap& tilemap_;
 
 public:
 
   explicit Npc();
-  void Setup();
+  void Setup(const TileMap* tileMap);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
 
   Status Move();
+  Status Eat();
 
-  int hunger_ = 0;
+  void SetupBehaviourTree();
+
+  int hunger_ = 50;
   bool resource_available_ = true;
   bool target_reachable_ = false;
+  float target_distance_ = 20;
 
   //motion
 

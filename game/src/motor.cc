@@ -11,3 +11,7 @@ void core::motion::motor::Update(float dt) {
   position_ += distance.normalized() * speed_ * dt;
 }
 
+float core::motion::motor::RemainingDistance() const{
+  return remaining_distance_;
+}
+

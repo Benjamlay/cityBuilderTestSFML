@@ -21,7 +21,8 @@ static void Setup()
   _window.create(sf::VideoMode({1000, 1000}), "SFML window");
 
   tilemap_.Setup();
-  npc.Setup();
+  npc.Setup(&tilemap_);
+
   dt = 0.f;
 }
 
@@ -37,18 +38,10 @@ void game::run()
 
     _window.clear();
 
-    lastMousePos = sf::Mouse::getPosition(_window);
-
-    for (int i = 0; i <= kHeight/kPixelStep; i++) {
-      for (int j = 0; j <= kWidth/kPixelStep; j++)
-      {
-        sf::Vector2i index = sf::Vector2i(i+1, j+1);
-        if (index == lastMousePos) {
-        }
-      }
-    }
 
     npc.Update(dt);
+
+
 
     //update graphic
     tilemap_.Draw(_window);

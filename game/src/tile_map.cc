@@ -67,24 +67,22 @@ TileMap::Tile TileMap::GetTileType(float value) {
 
 
 sf::Vector2f TileMap::ScreenPosition(const int index) {
+
+
   float x = ceil((index % (kWidth / kPixelStep)) * kPixelStep);
   float y = ceil((index / (kWidth / kPixelStep)) * kPixelStep);
-
-
 
   return {x, y};
 }
 TileMap::TileMap() : textures("../assets/textures/") {}
 
 
-void TileMap::Setup(){
-
-
-
+void TileMap::Setup() {
   textures.Load_All();
 
   Perlin perlin;
   std::vector<std::vector<float>> noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));
+
 
   for (int y = 0; y < kHeight/kPixelStep; ++y) {
     for (int x = 0; x < kWidth/kPixelStep; ++x) {
@@ -93,7 +91,7 @@ void TileMap::Setup(){
       float value = static_cast<float>(perlin.noise(fx, fy));
       noiseMap[y][x] = value;
       std::size_t index = y * kWidth/kPixelStep + x;
-
+      sf::Vector2f pos = ScreenPosition(value);
       if (value < 0.005f)
         tiles_[index] = Tile::WATER;
       else if (value < 0.6f)
@@ -111,5 +109,19 @@ void TileMap::Setup(){
     }
   }
 
+
+  int idx = 0;
+  for (const auto& tile : tiles_) {
+    if (tile == Tile::GRASS || tile == Tile::GRASS2 || tile == Tile::SAND || tile == Tile::WATER) /*TODO : enlever le tile::WATER */{
+      walkables_.push_back(ScreenPosition(idx));
+    }
+    ++idx;
+  }
 }
+
+std::vector<sf::Vector2f> TileMap::GetWalkables() const {
+
+  return walkables_;
+}
+
 

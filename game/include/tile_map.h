@@ -36,12 +36,14 @@ class TileMap {
   AssetManager<sf::Texture> textures;
 
   static sf::Vector2f ScreenPosition(int index);
-
+  std::vector<sf::Vector2f> walkables_;
 public:
   explicit TileMap();
   void Setup();
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
+
+  std::vector<sf::Vector2f> GetWalkables() const;
 
 };
 #endif //MAPGENERATOR_H
