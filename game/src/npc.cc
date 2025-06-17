@@ -8,9 +8,9 @@ Npc::Npc() : textures("../assets/iaTextures/") {}
 
 Status Npc::Move(){
 
-
   if (!target_reachable_) {
     std::cout << "Not reachable" << target_reachable_ << std::endl;
+    //Si la target n'est pas accessible par l'aStar
     return Status::kFailure;
   } else {
     std::cout << "I'm moving (distance = " << target_distance_ << ")" << std::endl;
@@ -27,13 +27,45 @@ Status Npc::Move(){
 
 Status Npc::Eat() {
   // No failure, until we have food storage system
-  hunger_ -= kHungerRate;
-  if (hunger_ > 0) {
-    return Status::kRunning;
-  } else {
+  // hunger_ -= kHungerRate;
+  // if (hunger_ >= 0) {
+  //   std::cout << "I'm eating" << std::endl;
+  //   return Status::kRunning;
+  // }else {
+  //     return Status::kSuccess;
+  // }
+  hunger_ = 0;
+  return Status::kSuccess;
+}
+Status Npc::findResource() {
+  Path path = motion::Astar::GetPath(
+      motor_.GetPosition(), NearestResource(tileMap_->GetCollectables()),
+      tileMap_->GetWalkables());
+
+  SetPath(path);
+  std::cout << "finding resource" << std::endl;
+  // // if (!path.IsValid()) {
+  // //   return Status::kFailure;
+  // // }
+  // if (path.IsDone()) {
+  //   return Status::kSuccess;
+  // }
+
+  return Status::kSuccess;
+}
+Status Npc::GoToResource() {
+
+  if (motor_.GetPosition().x == NearestResource(tileMap_->GetCollectables()).x && motor_.GetPosition().y == NearestResource(tileMap_->GetCollectables()).y) {
     return Status::kSuccess;
   }
+  else
+    return Status::kRunning;
 }
+Status Npc::ChopTree() {
+  std::cout << "Chopping tree" << std::endl;
+  return Status::kSuccess;
+}
+
 sf::Vector2f Npc::NearestResource(const std::vector<sf::Vector2f>& collectables) {
 
   const sf::Vector2f position = motor_.GetPosition();
@@ -59,7 +91,7 @@ sf::Vector2f Npc::NearestResource(const std::vector<sf::Vector2f>& collectables)
 void Npc::SetupBehaviourTree(){
   auto feedSequence = std::make_unique<Sequence>();
 
-  feedSequence->AddChild(std::make_unique<Action>([this]() {
+  feedSequence->AddChild(std::make_unique<Action>([this] {
       if (hunger_ >= 100) {
           std::cout << "I'm hungry, wanna eat........" << std::endl;
           return Status::kSuccess;
@@ -68,24 +100,34 @@ void Npc::SetupBehaviourTree(){
           return Status::kFailure;
       }
   }));
-  feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
+
   feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Eat, this)));
+  //feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
+
+  auto workSequence = std::make_unique<Sequence>();
+
+  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::findResource, this)));
+  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::ChopTree, this)));
 
   auto selector = std::make_unique<Selector>();
   // Attach the sequence to the selector
   selector->AddChild(std::move(feedSequence));
+  selector->AddChild(std::move(workSequence));
+
   // Work sequence
-  selector->AddChild(std::make_unique<Action>([this]() {
-      hunger_ += kHungerRate * 5;
-      if (resource_available_) {
-          std::cout << "Resource Available, working....." << std::endl;
-          return Status::kSuccess;
-      }
-      return Status::kFailure;
-  }));
+
+  // selector->AddChild(std::make_unique<Action>([this]() {
+  //     //hunger_ += kHungerRate * 5;
+  //     if (resource_available_) {
+  //         std::cout << "Resource Available, working....." << std::endl;
+  //         return Status::kSuccess;
+  //     }
+  //     return Status::kFailure;
+  // }));
+
   // Idle sequence
   selector->AddChild(std::make_unique<Action>([this]() {
-      hunger_ += kHungerRate * 5;
+      //hunger_ += kHungerRate * 5;
       std::cout << "I'm sleeping" << std::endl;
       return Status::kSuccess;
   }));
@@ -98,19 +140,14 @@ void Npc::Setup(const TileMap* tileMap)
   textures.Load("guy", textures.folder_ + "guy.png");
 
 
-  motor_.SetPosition({0, 0});
-  //motor_.SetDestination({1300.0f, 1300.0f});
-  motor_.SetSpeed(kMovingSpeed);
+  motor_.SetPosition({32, 32});
 
+  motor_.SetSpeed(kMovingSpeed);
 
   tileMap_ = tileMap;
 
   SetupBehaviourTree();
 
-  Path path = motion::Astar::GetPath(motor_.GetPosition(),
-    NearestResource(tileMap_->GetCollectables()), tileMap_->GetWalkables());
-
-  SetPath(path);
 
 }
 
@@ -123,6 +160,9 @@ void Npc::Update(float dt)
       motor_.SetDestination(path_.GetNextPoint());
     }
   }
+  hunger_ += dt * 10.0f;
+  root_->Tick();
+  //std::cout << "Hunger : " << hunger_ << std::endl;
 }
 
 void Npc::Draw(sf::RenderWindow& window)

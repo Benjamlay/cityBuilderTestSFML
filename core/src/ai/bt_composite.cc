@@ -6,8 +6,7 @@ void Composite::Reset() {
   childIdx = 0;
 }
 
-void Composite::AddChild(
-    std::unique_ptr<Node> child) {
+void Composite::AddChild(std::unique_ptr<Node> child) {
   children_.push_back(std::move(child));
 }
 

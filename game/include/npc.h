@@ -23,7 +23,7 @@ class Npc {
 
   const TileMap* tileMap_;
 
-  static constexpr float kHungerRate = 0.1f;
+  static constexpr float kHungerRate = 50.0f;
   static constexpr float kMovingSpeed = 50.0f;
 
 
@@ -36,11 +36,16 @@ public:
 
   Status Move();
   Status Eat();
+  Status findResource();
+  Status GoToResource();
+  Status ChopTree();
+  Status Sleep();
+
 
   sf::Vector2f NearestResource(const std::vector<sf::Vector2f>& collectables);
   void SetupBehaviourTree();
 
-  int hunger_ = 50;
+  int hunger_ = 0;
   bool resource_available_ = true;
   bool target_reachable_ = false;
   float target_distance_ = 20;
