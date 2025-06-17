@@ -37,6 +37,8 @@ class TileMap {
 
   static sf::Vector2f ScreenPosition(int index);
   std::vector<sf::Vector2f> walkables_;
+  std::vector<sf::Vector2f> collectables_;
+
 public:
   explicit TileMap();
   void Setup();
@@ -44,6 +46,7 @@ public:
   Tile GetTileType(float value);
 
   std::vector<sf::Vector2f> GetWalkables() const;
+  std::vector<sf::Vector2f> GetCollectables() const;
 
 };
 #endif //MAPGENERATOR_H

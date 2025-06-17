@@ -77,7 +77,7 @@ void Npc::Setup(const TileMap* tileMap)
   textures.Load("guy", textures.folder_ + "guy.png");
 
 
-  motor_.SetPosition({300, 300});
+  motor_.SetPosition({0, 0});
   //motor_.SetDestination({1300.0f, 1300.0f});
   motor_.SetSpeed(kMovingSpeed);
 
@@ -86,7 +86,7 @@ void Npc::Setup(const TileMap* tileMap)
 
   SetupBehaviourTree();
 
-  Path path = motion::Astar::GetPath(motor_.GetPosition(), {2560, 2560}, tileMap_->GetWalkables());
+  Path path = motion::Astar::GetPath(motor_.GetPosition(), {256, 256}, tileMap_->GetWalkables());
 
   SetPath(path);
 
@@ -101,8 +101,6 @@ void Npc::Update(float dt)
       motor_.SetDestination(path_.GetNextPoint());
     }
   }
-  motor_.Update(dt);
-
 }
 
 void Npc::Draw(sf::RenderWindow& window)
@@ -110,11 +108,12 @@ void Npc::Draw(sf::RenderWindow& window)
   sf::Sprite GuySprite(textures.GetTexture("guy"));
   GuySprite.setPosition(motor_.GetPosition());
   window.draw(GuySprite);
-  std::cout << "Guy pos : " << GuySprite.getPosition().x << ": "<< GuySprite.getPosition().y << std::endl;
-  std::cout << "motor pos : " << motor_.GetPosition().x << ": "<< motor_.GetPosition().y << std::endl;
+  //std::cout << "Guy pos : " << GuySprite.getPosition().x << ": "<< GuySprite.getPosition().y << std::endl;
+  //std::cout << "motor pos : " << motor_.GetPosition().x << ": "<< motor_.GetPosition().y << std::endl;
 }
 
 void Npc::SetPath(const Path& path){
   path_ = path;
   motor_.SetDestination(path_.StartPoint());
+  std::cout << path_.StartPoint().x << ":" << path_.StartPoint().y << std::endl;
 }

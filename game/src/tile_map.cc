@@ -78,11 +78,11 @@ TileMap::TileMap() : textures("../assets/textures/") {}
 
 
 void TileMap::Setup() {
+
   textures.Load_All();
 
   Perlin perlin;
-  std::vector<std::vector<float>> noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));
-
+  std::vector noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));
 
   for (int y = 0; y < kHeight/kPixelStep; ++y) {
     for (int x = 0; x < kWidth/kPixelStep; ++x) {
@@ -90,9 +90,10 @@ void TileMap::Setup() {
       float fy = y / 20.f;
       float value = static_cast<float>(perlin.noise(fx, fy));
       noiseMap[y][x] = value;
-      std::size_t index = y * kWidth/kPixelStep + x;
+      int index = y * kWidth/kPixelStep + x;
 
-      sf::Vector2f pos = ScreenPosition(static_cast<int>(index));
+      sf::Vector2f pos = ScreenPosition(index);
+
       if (value < 0.01f)
         {tiles_[index] = Tile::WATER;}
       else if (value < 0.3f)
@@ -104,26 +105,22 @@ void TileMap::Setup() {
 
       if (value > 0.95f) {
         resources_[index] = resourceType::TREE;
+        collectables_.push_back(pos);
       }
       else {
         resources_[index] = resourceType::EMPTY;
       }
-      if (value > 0.01f) {
-        walkables_.push_back(pos);
-      }
+
+      walkables_.push_back(pos);
+
     }
   }
 
-    std::cout << walkables_.size() << std::endl;
-
-
-
+    //std::cout << walkables_.size() << std::endl;
+    //std::cout << tiles_.size() << std::endl;
 
 }
-
-std::vector<sf::Vector2f> TileMap::GetWalkables() const {
-
-  return walkables_;
-}
+std::vector<sf::Vector2f> TileMap::GetWalkables() const { return walkables_; }
+std::vector<sf::Vector2f> TileMap::GetCollectables() const { return collectables_;}
 
 

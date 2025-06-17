@@ -30,6 +30,7 @@ void game::run()
 {
   Setup();
 
+
   while (_window.isOpen())
   {
     dt = clock_.restart().asSeconds();
@@ -39,10 +40,7 @@ void game::run()
     _window.clear();
 
 
-
     npc.Update(dt);
-
-
 
     //update graphic
     tilemap_.Draw(_window);

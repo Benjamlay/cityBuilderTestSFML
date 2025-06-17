@@ -59,7 +59,7 @@ namespace motion::Astar {
   Path GetPath(sf::Vector2f start, sf::Vector2f end, std::vector<sf::Vector2f> walkableTiles){
     Path aStarPath;
 
-    // Are start / end point in walkables tiles ?
+    //Are start / end point in walkables tiles ?
     auto f = std::find(walkableTiles.begin(), walkableTiles.end(), start);
     if (f == walkableTiles.end()) {
       std::cout << "Start point not in walkable tiles" << std::endl;
@@ -91,7 +91,6 @@ namespace motion::Astar {
 
       for (auto neighbour: neighbours) {
         sf::Vector2f newPosition = currentNode.position + neighbour;
-
         auto f = std::find(walkableTiles.begin(), walkableTiles.end(), newPosition);
 
         if (f != walkableTiles.end()) {
