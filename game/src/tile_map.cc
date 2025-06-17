@@ -116,7 +116,7 @@ void TileMap::Setup() {
     }
   }
 
-    //std::cout << walkables_.size() << std::endl;
+    //std::cout << collectables_.size() << std::endl;
     //std::cout << tiles_.size() << std::endl;
 
 }

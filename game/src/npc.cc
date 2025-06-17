@@ -25,7 +25,7 @@ Status Npc::Move(){
   }
 }
 
-Status Npc::Eat(){
+Status Npc::Eat() {
   // No failure, until we have food storage system
   hunger_ -= kHungerRate;
   if (hunger_ > 0) {
@@ -33,6 +33,27 @@ Status Npc::Eat(){
   } else {
     return Status::kSuccess;
   }
+}
+sf::Vector2f Npc::NearestResource(const std::vector<sf::Vector2f>& collectables) {
+
+  const sf::Vector2f position = motor_.GetPosition();
+
+  float min_distance = std::numeric_limits<float>::max();
+  sf::Vector2f nearest_resource;
+
+  for (const auto& resource : collectables) {
+
+    float dx = resource.x - position.x;
+    float dy = resource.y - position.y;
+    float distance = std::sqrt(dx * dx + dy * dy);
+
+    if (distance < min_distance) {
+      min_distance = distance;
+      nearest_resource = resource;
+    }
+  }
+
+  return nearest_resource;
 }
 
 void Npc::SetupBehaviourTree(){
@@ -86,7 +107,8 @@ void Npc::Setup(const TileMap* tileMap)
 
   SetupBehaviourTree();
 
-  Path path = motion::Astar::GetPath(motor_.GetPosition(), {256, 256}, tileMap_->GetWalkables());
+  Path path = motion::Astar::GetPath(motor_.GetPosition(),
+    NearestResource(tileMap_->GetCollectables()), tileMap_->GetWalkables());
 
   SetPath(path);
 
