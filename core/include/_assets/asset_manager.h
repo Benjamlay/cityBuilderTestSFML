@@ -13,7 +13,7 @@ class AssetManager {
 public :
 
   std::string folder_;
-  explicit AssetManager(std::string folder);
+  explicit AssetManager(std::string_view folder);
   void Load();
   void Load(const std::string& name, const std::string& path);
   void Load_All();
@@ -23,7 +23,7 @@ public :
 };
 
 template <typename TAsset>
-AssetManager<TAsset>::AssetManager(std::string folder): folder_(folder) {
+AssetManager<TAsset>::AssetManager(std::string_view folder): folder_(folder) {
 
 }
 

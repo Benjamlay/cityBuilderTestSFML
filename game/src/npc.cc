@@ -26,39 +26,46 @@ Status Npc::Move(){
 }
 
 Status Npc::Eat() {
-  // No failure, until we have food storage system
-  // hunger_ -= kHungerRate;
-  // if (hunger_ >= 0) {
-  //   std::cout << "I'm eating" << std::endl;
-  //   return Status::kRunning;
-  // }else {
-  //     return Status::kSuccess;
-  // }
-  hunger_ = 0;
-  return Status::kSuccess;
+  //No failure, until we have food storage system
+  hunger_ -= kHungerRate;
+
+  if (hunger_ <= 0){
+    std::cout << "I'm full" << std::endl;
+    return Status::kSuccess;
+  }
+
+  std::cout << "I'm eating" << std::endl;
+  return Status::kRunning;
+
+
 }
 Status Npc::findResource() {
+
   Path path = motion::Astar::GetPath(
       motor_.GetPosition(), NearestResource(tileMap_->GetCollectables()),
       tileMap_->GetWalkables());
 
-  SetPath(path);
-  std::cout << "finding resource" << std::endl;
-  // // if (!path.IsValid()) {
-  // //   return Status::kFailure;
-  // // }
-  // if (path.IsDone()) {
-  //   return Status::kSuccess;
-  // }
+  if (path.IsValid()) {
+    SetPath(path);
+    std::cout << "path found !" << std::endl;
+    return Status::kSuccess;
+  }
+  else {
+    return Status::kFailure;
+  }
 
-  return Status::kSuccess;
+
 }
 Status Npc::GoToResource() {
 
-  if (motor_.GetPosition().x == NearestResource(tileMap_->GetCollectables()).x && motor_.GetPosition().y == NearestResource(tileMap_->GetCollectables()).y) {
+  if (motor_.GetPosition().x == NearestResource(tileMap_->GetCollectables()).x
+    && motor_.GetPosition().y == NearestResource(tileMap_->GetCollectables()).y)
+  {
+    std::cout << "I'm at the resource" << std::endl;
     return Status::kSuccess;
   }
   else
+    std::cout << "going to the resource" << std::endl;
     return Status::kRunning;
 }
 Status Npc::ChopTree() {
@@ -88,29 +95,32 @@ sf::Vector2f Npc::NearestResource(const std::vector<sf::Vector2f>& collectables)
   return nearest_resource;
 }
 
+Status Npc::IsHungry()
+{
+  if (hunger_ >= 100) {
+    std::cout << "I'm hungry, wanna eat........" << std::endl;
+    return Status::kSuccess;
+  }
+  std::cout << "I'm not hungry, thanks........" << std::endl;
+  return Status::kFailure;
+}
+
 void Npc::SetupBehaviourTree(){
+
   auto feedSequence = std::make_unique<Sequence>();
 
-  feedSequence->AddChild(std::make_unique<Action>([this] {
-      if (hunger_ >= 100) {
-          std::cout << "I'm hungry, wanna eat........" << std::endl;
-          return Status::kSuccess;
-      } else {
-          std::cout << "I'm not hungry, thanks........" << std::endl;
-          return Status::kFailure;
-      }
-  }));
-
+  feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::IsHungry, this)));
   feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Eat, this)));
-  //feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
 
   auto workSequence = std::make_unique<Sequence>();
 
   workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::findResource, this)));
+  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::GoToResource, this)));
   workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::ChopTree, this)));
 
   auto selector = std::make_unique<Selector>();
   // Attach the sequence to the selector
+
   selector->AddChild(std::move(feedSequence));
   selector->AddChild(std::move(workSequence));
 
@@ -139,8 +149,8 @@ void Npc::Setup(const TileMap* tileMap)
 {
   textures.Load("guy", textures.folder_ + "guy.png");
 
-
-  motor_.SetPosition({32, 32});
+  hunger_ = 0;
+  motor_.SetPosition({240, 240});
 
   motor_.SetSpeed(kMovingSpeed);
 
@@ -154,15 +164,18 @@ void Npc::Setup(const TileMap* tileMap)
 
 void Npc::Update(float dt)
 {
+  root_->Reset();
+  root_->Tick();
+
   if (path_.IsValid()){
     motor_.Update(dt);
     if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {
       motor_.SetDestination(path_.GetNextPoint());
     }
   }
-  hunger_ += dt * 10.0f;
-  root_->Tick();
-  //std::cout << "Hunger : " << hunger_ << std::endl;
+  hunger_ += 50 * dt;
+
+  std::cout << "Hunger : " << hunger_ << std::endl;
 }
 
 void Npc::Draw(sf::RenderWindow& window)

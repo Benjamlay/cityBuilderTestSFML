@@ -35,6 +35,7 @@ public:
   void Draw(sf::RenderWindow &window);
 
   Status Move();
+  Status IsHungry();
   Status Eat();
   Status findResource();
   Status GoToResource();
@@ -45,7 +46,7 @@ public:
   sf::Vector2f NearestResource(const std::vector<sf::Vector2f>& collectables);
   void SetupBehaviourTree();
 
-  int hunger_ = 0;
+  int hunger_;
   bool resource_available_ = true;
   bool target_reachable_ = false;
   float target_distance_ = 20;

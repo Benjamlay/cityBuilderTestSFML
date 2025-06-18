@@ -110,13 +110,14 @@ void TileMap::Setup() {
       else {
         resources_[index] = resourceType::EMPTY;
       }
-
-      walkables_.push_back(pos);
-
+      if (value > 0.1f)
+      {
+        walkables_.push_back(pos);
+      }
     }
   }
 
-    //std::cout << collectables_.size() << std::endl;
+    std::cout << walkables_.size() << std::endl;
     //std::cout << tiles_.size() << std::endl;
 
 }
