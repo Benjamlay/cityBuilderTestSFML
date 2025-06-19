@@ -15,7 +15,7 @@ Status Sequence::Tick() {
     }
     childIdx++;
   }
-
+  Reset();
   return Status::kSuccess;
 }
 

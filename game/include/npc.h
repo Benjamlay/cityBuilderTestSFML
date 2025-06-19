@@ -23,7 +23,7 @@ class Npc {
 
   const TileMap* tileMap_;
 
-  static constexpr float kHungerRate = 50.0f;
+  static constexpr float kHungerRate = 10.0f;
   static constexpr float kMovingSpeed = 50.0f;
 
 
@@ -50,6 +50,7 @@ public:
   bool resource_available_ = true;
   bool target_reachable_ = false;
   float target_distance_ = 20;
+  bool is_eating_ = false;
 
   //motion
 

@@ -27,10 +27,12 @@ Status Npc::Move(){
 
 Status Npc::Eat() {
   //No failure, until we have food storage system
+  is_eating_ = true;
   hunger_ -= kHungerRate;
 
   if (hunger_ <= 0){
     std::cout << "I'm full" << std::endl;
+    is_eating_ = false;
     return Status::kSuccess;
   }
 
@@ -40,6 +42,7 @@ Status Npc::Eat() {
 
 }
 Status Npc::findResource() {
+
 
   Path path = motion::Astar::GetPath(
       motor_.GetPosition(), NearestResource(tileMap_->GetCollectables()),
@@ -124,16 +127,6 @@ void Npc::SetupBehaviourTree(){
   selector->AddChild(std::move(feedSequence));
   selector->AddChild(std::move(workSequence));
 
-  // Work sequence
-
-  // selector->AddChild(std::make_unique<Action>([this]() {
-  //     //hunger_ += kHungerRate * 5;
-  //     if (resource_available_) {
-  //         std::cout << "Resource Available, working....." << std::endl;
-  //         return Status::kSuccess;
-  //     }
-  //     return Status::kFailure;
-  // }));
 
   // Idle sequence
   selector->AddChild(std::make_unique<Action>([this]() {
@@ -157,15 +150,17 @@ void Npc::Setup(const TileMap* tileMap)
   tileMap_ = tileMap;
 
   SetupBehaviourTree();
-
-
 }
 
 
 void Npc::Update(float dt)
 {
-  root_->Reset();
-  root_->Tick();
+  auto status = root_->Tick();
+  std::cout << "Root tick returned: " << static_cast<int>(status) << std::endl;
+
+  if (!is_eating_) {
+    hunger_ += kHungerRate;
+  }
 
   if (path_.IsValid()){
     motor_.Update(dt);
@@ -173,7 +168,7 @@ void Npc::Update(float dt)
       motor_.SetDestination(path_.GetNextPoint());
     }
   }
-  hunger_ += 50 * dt;
+  //hunger_ += 50 * dt;
 
   std::cout << "Hunger : " << hunger_ << std::endl;
 }
