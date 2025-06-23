@@ -51,18 +51,3 @@ public:
 };
 
 #endif //MAPGENERATOR_H
-// inline sf::Vector2i ToGridIndex(sf::Vector2f pos, int tileSize) {
-//   return sf::Vector2i(
-//       static_cast<int>(std::floor(pos.x / static_cast<float>(tileSize))),
-//       static_cast<int>(std::floor(pos.y / static_cast<float>(tileSize)))
-//   );
-// }
-//
-// // --- Conversion inverse : indices grille -> position centrale de la tuile---
-// inline sf::Vector2f ToGridPosition(sf::Vector2i idx, int tileSize) {
-//   // Retourne position centrale de la tuile (tu peux utiliser le coin haut/gauche selon ton besoin)
-//   return sf::Vector2f(
-//       static_cast<float>(idx.x * tileSize + tileSize / 2),
-//       static_cast<float>(idx.y * tileSize + tileSize / 2)
-//   );
-// }

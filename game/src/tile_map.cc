@@ -110,7 +110,7 @@ void TileMap::Setup() {
       else {
         resources_[index] = resourceType::EMPTY;
       }
-      if (value > 0.1f)
+      if (value > 0.2f)
       {
         walkables_.push_back(pos);
       }

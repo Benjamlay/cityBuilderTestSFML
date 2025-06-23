@@ -1,6 +1,8 @@
 ﻿#include "../include/game.h"
+
 #include "../include/tile_map.h"
 #include "npc.h"
+#include "npc_manager.h"
 
 namespace
 {
@@ -9,7 +11,8 @@ namespace
   bool dragging = false;
   sf::Vector2i lastMousePos;
   TileMap tilemap_;
-  Npc npc;
+  //Npc npc;
+game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
 
@@ -21,7 +24,9 @@ static void Setup()
   _window.create(sf::VideoMode({1000, 1000}), "SFML window");
 
   tilemap_.Setup();
-  npc.Setup(&tilemap_);
+  //npc.Setup(&tilemap_);
+  npc_manager_.Add(&tilemap_);
+  //npc_manager_.Add(&tilemap_);
 
   dt = 0.f;
 }
@@ -40,11 +45,13 @@ void game::run()
     _window.clear();
 
 
-    npc.Update(dt);
+    //npc.Update(dt);
+    npc_manager_.Update(dt);
 
     //update graphic
     tilemap_.Draw(_window);
-    npc.Draw(_window);
+    //npc.Draw(_window);
+    npc_manager_.Draw(_window);
     _window.setView(view);
     _window.display();
 
