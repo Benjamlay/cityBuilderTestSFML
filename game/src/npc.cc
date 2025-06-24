@@ -184,10 +184,18 @@ void Npc::Draw(sf::RenderWindow& window) {
   // GuySprite.getPosition().y << std::endl; std::cout << "motor pos : " <<
   // motor_.GetPosition().x << ": "<< motor_.GetPosition().y << std::endl;
 }
-motor Npc::getMotor() const {return motor_;}
+motor Npc::getMotor() const { return motor_; }
+
+
+sf::FloatRect Npc::GetHitBox() {
+  sf::Sprite GuySprite(textures.GetTexture("guy"));
+  GuySprite.setPosition(motor_.GetPosition());
+  hit_box_ = GuySprite.getGlobalBounds();
+  return hit_box_;
+}
 
 void Npc::SetPath(const Path& path){
   path_ = path;
   motor_.SetDestination(path_.StartPoint());
-  std::cout << path_.StartPoint().x << ":" << path_.StartPoint().y << std::endl;
+  //std::cout << path_.StartPoint().x << ":" << path_.StartPoint().y << std::endl;
 }

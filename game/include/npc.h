@@ -17,6 +17,7 @@ class Npc {
 
   AssetManager<sf::Texture> textures;
   std::unique_ptr<Node> root_;
+  sf::FloatRect hit_box_;
 
   motor motor_;
   Path path_;
@@ -34,6 +35,7 @@ public:
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
   motor getMotor() const;
+  sf::FloatRect GetHitBox();
 
   Status Move();
   Status IsHungry();

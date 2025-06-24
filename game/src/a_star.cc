@@ -44,8 +44,7 @@ namespace motion::Astar {
     aStarNode *current_node = &start_node;
 
     while (current_node != nullptr) {
-      std::cout << "reconstiution point : " << current_node->position.x << ":" << current_node->position.y <<
-              std::endl;
+      //std::cout << "reconstiution point : " << current_node->position.x << ":" << current_node->position.y << std::endl;
       pathPoints.emplace_back(current_node->position);
       current_node = current_node->previous_node;
     }
@@ -82,10 +81,10 @@ namespace motion::Astar {
       aStarNode currentNode = openList.top();
       openList.pop();
 
-      std::cout << "current node : " << currentNode.position.x << ":" << currentNode.position.y << std::endl;
+     // std::cout << "current node : " << currentNode.position.x << ":" << currentNode.position.y << std::endl;
 
       if (currentNode.position == end) {
-        std::cout << "Found path" << std::endl;
+        //std::cout << "Found path" << std::endl;
         return ReconstitutePath(currentNode);
       }
 

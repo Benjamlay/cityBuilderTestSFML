@@ -22,6 +22,18 @@ namespace game::ai {
       npc.Draw(window);
     }
   }
-  std::vector<Npc> NpcManager::GetNpcs() {return npcs_;}
+  void NpcManager::GetHitBox() {
+    for (auto& npc : npcs_) {
+      npc.GetHitBox();
+    }
+  }
+  void NpcManager::CheckCollisions(std::vector</*trees*/sf::FloatRect>& collisions) {
+
+    for (auto& npc : npcs_) {
+      for (auto& collision : collisions) {
+        npc.GetHitBox();
+      }
+    }
+  }
 
   }  // namespace game::ai
