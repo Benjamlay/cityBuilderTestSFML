@@ -31,26 +31,26 @@ Status Npc::Eat() {
   hunger_ -= kHungerRate;
 
   if (hunger_ <= 0){
-    std::cout << "I'm full" << std::endl;
+    //std::cout << "I'm full" << std::endl;
     is_eating_ = false;
     return Status::kSuccess;
   }
 
-  std::cout << "I'm eating" << std::endl;
+  //std::cout << "I'm eating" << std::endl;
   return Status::kRunning;
 
 
 }
 Status Npc::findResource() {
 
-
+//TODO : change the end point to something than can evolve. NPC must be able to find is home too, or another tree.
   Path path = motion::Astar::GetPath(
       motor_.GetPosition(), NearestResource(tileMap_->GetCollectablesTrees()),
       tileMap_->GetWalkables());
 
   if (path.IsValid()) {
     SetPath(path);
-    std::cout << "path found !" << std::endl;
+    //std::cout << "path found !" << std::endl;
     return Status::kSuccess;
   }
   else {
@@ -64,16 +64,16 @@ Status Npc::GoToResource() {
   if (motor_.GetPosition().x == NearestResource(tileMap_->GetCollectablesTrees()).x
     && motor_.GetPosition().y == NearestResource(tileMap_->GetCollectablesTrees()).y)
   {
-    std::cout << "I'm at the resource" << std::endl;
+    //std::cout << "I'm at the resource" << std::endl;
     return Status::kSuccess;
   }
   else
-    std::cout << "going to the resource" << std::endl;
+    //std::cout << "going to the resource" << std::endl;
     return Status::kRunning;
 }
 
 Status Npc::ChopTree() {
-  std::cout << "Chopping tree" << std::endl;
+  //std::cout << "Chopping tree" << std::endl;
 
   return Status::kSuccess;
 }
@@ -173,17 +173,18 @@ void Npc::Update(float dt)
   }
   //hunger_ += 50 * dt;
 
-  std::cout << "Hunger : " << hunger_ << std::endl;
+  //std::cout << "Hunger : " << hunger_ << std::endl;
 }
 
-void Npc::Draw(sf::RenderWindow& window)
-{
+void Npc::Draw(sf::RenderWindow& window) {
   sf::Sprite GuySprite(textures.GetTexture("guy"));
   GuySprite.setPosition(motor_.GetPosition());
   window.draw(GuySprite);
-  //std::cout << "Guy pos : " << GuySprite.getPosition().x << ": "<< GuySprite.getPosition().y << std::endl;
-  //std::cout << "motor pos : " << motor_.GetPosition().x << ": "<< motor_.GetPosition().y << std::endl;
+  // std::cout << "Guy pos : " << GuySprite.getPosition().x << ": "<<
+  // GuySprite.getPosition().y << std::endl; std::cout << "motor pos : " <<
+  // motor_.GetPosition().x << ": "<< motor_.GetPosition().y << std::endl;
 }
+motor Npc::getMotor() const {return motor_;}
 
 void Npc::SetPath(const Path& path){
   path_ = path;

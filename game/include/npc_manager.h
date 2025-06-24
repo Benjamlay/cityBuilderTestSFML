@@ -15,6 +15,7 @@ namespace game::ai {
     void Add(const TileMap *tilemap);
     void Update(float dt);
     void Draw(sf::RenderWindow &window);
+    std::vector<Npc>GetNpcs();
 
   };
 }

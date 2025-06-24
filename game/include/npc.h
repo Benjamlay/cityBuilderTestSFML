@@ -33,6 +33,7 @@ public:
   void Setup(const TileMap* tileMap);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
+  motor getMotor() const;
 
   Status Move();
   Status IsHungry();

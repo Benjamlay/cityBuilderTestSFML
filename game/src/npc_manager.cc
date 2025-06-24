@@ -22,6 +22,6 @@ namespace game::ai {
       npc.Draw(window);
     }
   }
+  std::vector<Npc> NpcManager::GetNpcs() {return npcs_;}
 
-
-}
+  }  // namespace game::ai
