@@ -27,7 +27,6 @@ class TileMap {
     EMPTY,
     TREE,
     ROCK
-
   };
 
   std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_;
@@ -37,16 +36,19 @@ class TileMap {
 
   static sf::Vector2f ScreenPosition(int index);
   std::vector<sf::Vector2f> walkables_;
-  std::vector<sf::Vector2f> collectables_;
+  std::vector<sf::Vector2f> collectables_trees_;
+  std::vector<sf::Vector2f> collectables_rocks_;
+  int seed_;
 
 public:
   explicit TileMap();
-  void Setup();
+  void Setup(int seed);
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
 
   std::vector<sf::Vector2f> GetWalkables() const;
-  std::vector<sf::Vector2f> GetCollectables() const;
+  std::vector<sf::Vector2f> GetCollectablesTrees() const;
+  std::vector<sf::Vector2f> GetCollectablesRocks() const;
 
 };
 

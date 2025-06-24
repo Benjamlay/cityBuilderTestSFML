@@ -53,6 +53,7 @@ void AssetManager<TAsset>::Load_All()
   Load("tileSand",folder_ + "tileSand1.png");
   Load("water", folder_ + "water.png");
   Load("tree", folder_ + "tree.png");
+  Load("rock", folder_ + "rock.png");
   //TODO: mettre cette methode dans tile_map et non dans l'assetManager
 }
 

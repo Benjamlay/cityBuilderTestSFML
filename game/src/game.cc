@@ -21,9 +21,10 @@ game::ai::NpcManager npc_manager_;
 
 static void Setup()
 {
-  _window.create(sf::VideoMode({1000, 1000}), "SFML window");
+  _window.create(sf::VideoMode({1000, 1000}), "City Builder");
 
-  tilemap_.Setup();
+  int mapSeed = 4345;
+  tilemap_.Setup(mapSeed);
   //npc.Setup(&tilemap_);
   npc_manager_.Add(&tilemap_);
   //npc_manager_.Add(&tilemap_);

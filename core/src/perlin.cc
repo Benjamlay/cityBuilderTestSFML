@@ -3,10 +3,19 @@
 
 Perlin::Perlin() {
   p.resize(256);
-  std::iota(p.begin(), p.end(), 0); // 0 à 255
+  std::iota(p.begin(), p.end(), 0);
   std::default_random_engine engine(std::random_device{}());
   std::shuffle(p.begin(), p.end(), engine);
-  p.insert(p.end(), p.begin(), p.end()); // double le vecteur
+  p.insert(p.end(), p.begin(), p.end());
+}
+Perlin::Perlin(unsigned int seed) {
+  p.resize(256);
+  std::iota(p.begin(), p.end(), 0);
+  std::default_random_engine engine(seed);
+  std::shuffle(p.begin(), p.end(), engine);
+  p.insert(p.end(), p.begin(), p.end());
+
+
 }
 
 double Perlin::noise(double x, double y) const {

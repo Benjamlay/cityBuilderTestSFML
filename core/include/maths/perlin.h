@@ -12,6 +12,8 @@
 class Perlin {
 public:
   Perlin();
+  Perlin(unsigned int seed);
+
   double noise(double x, double y) const;
 
 private:

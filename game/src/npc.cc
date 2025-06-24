@@ -45,7 +45,7 @@ Status Npc::findResource() {
 
 
   Path path = motion::Astar::GetPath(
-      motor_.GetPosition(), NearestResource(tileMap_->GetCollectables()),
+      motor_.GetPosition(), NearestResource(tileMap_->GetCollectablesTrees()),
       tileMap_->GetWalkables());
 
   if (path.IsValid()) {
@@ -61,8 +61,8 @@ Status Npc::findResource() {
 }
 Status Npc::GoToResource() {
 
-  if (motor_.GetPosition().x == NearestResource(tileMap_->GetCollectables()).x
-    && motor_.GetPosition().y == NearestResource(tileMap_->GetCollectables()).y)
+  if (motor_.GetPosition().x == NearestResource(tileMap_->GetCollectablesTrees()).x
+    && motor_.GetPosition().y == NearestResource(tileMap_->GetCollectablesTrees()).y)
   {
     std::cout << "I'm at the resource" << std::endl;
     return Status::kSuccess;
@@ -71,8 +71,10 @@ Status Npc::GoToResource() {
     std::cout << "going to the resource" << std::endl;
     return Status::kRunning;
 }
+
 Status Npc::ChopTree() {
   std::cout << "Chopping tree" << std::endl;
+
   return Status::kSuccess;
 }
 
@@ -101,10 +103,10 @@ sf::Vector2f Npc::NearestResource(const std::vector<sf::Vector2f>& collectables)
 Status Npc::IsHungry()
 {
   if (hunger_ >= 100) {
-    std::cout << "I'm hungry, wanna eat........" << std::endl;
+    //std::cout << "I'm hungry, wanna eat........" << std::endl;
     return Status::kSuccess;
   }
-  std::cout << "I'm not hungry, thanks........" << std::endl;
+  //std::cout << "I'm not hungry, thanks........" << std::endl;
   return Status::kFailure;
 }
 
@@ -131,7 +133,7 @@ void Npc::SetupBehaviourTree(){
   // Idle sequence
   selector->AddChild(std::make_unique<Action>([this]() {
       //hunger_ += kHungerRate * 5;
-      std::cout << "I'm sleeping" << std::endl;
+      //std::cout << "I'm sleeping" << std::endl;
       return Status::kSuccess;
   }));
 
@@ -156,7 +158,7 @@ void Npc::Setup(const TileMap* tileMap)
 void Npc::Update(float dt)
 {
   auto status = root_->Tick();
-  std::cout << "Root tick returned: " << static_cast<int>(status) << std::endl;
+  //std::cout << "Root tick returned: " << static_cast<int>(status) << std::endl;
 
   if (!is_eating_) {
     hunger_ += kHungerRate;
@@ -167,6 +169,7 @@ void Npc::Update(float dt)
     if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {
       motor_.SetDestination(path_.GetNextPoint());
     }
+
   }
   //hunger_ += 50 * dt;
 
