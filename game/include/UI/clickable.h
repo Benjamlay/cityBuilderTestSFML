@@ -8,10 +8,9 @@
 
 namespace game::ui {
 class Clickable {
-private:
+
   sf::IntRect zone_;
   bool isHover_ = false;
-
 
 public:
   void HandleEvent(std::optional<sf::Event> evt);

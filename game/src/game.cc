@@ -1,6 +1,7 @@
 ﻿#include "../include/game.h"
 
 #include "../include/tile_map.h"
+#include "UI/button.h"
 #include "UI/clickable.h"
 #include "npc.h"
 #include "npc_manager.h"
@@ -9,6 +10,7 @@ namespace
 {
   sf::RenderWindow window_;
   sf::View view = window_.getDefaultView();
+  sf::View UIview = window_.getDefaultView();
   bool dragging_ = false;
 
   sf::Vector2i lastMousePos;
@@ -17,8 +19,8 @@ namespace
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
-  game::ui::Clickable clickable_;
-  sf::RectangleShape rect_;
+  game::ui::Button button({100, 100});
+  game::ui::Button button2({100, 240});
 
 }  // namespace
 
@@ -33,19 +35,6 @@ static void Setup()
   npc_manager_.Add(&tilemap_);
   //npc_manager_.Add(&tilemap_);
 
-  rect_.setPosition({static_cast<float>(window_.getSize().x / 2), static_cast<float>(window_.getSize().y / 2)});
-  rect_.setSize({200, 200});
-
-  clickable_.SetZone(sf::IntRect(
-      {static_cast<int>(window_.getSize().x / 2), static_cast<int>(window_.getSize().y / 2)},
-      {200, 200})
-      );
-  clickable_.OnReleasedLeft = [] () {std::cout << "Left Released" << std::endl;};
-  clickable_.OnReleasedRight = [] () {std::cout << "Right Released" << std::endl;};
-  clickable_.OnPressedLeft = [] () {std::cout << "Left Pressed" << std::endl;};
-  clickable_.OnPressedRight = [] () {std::cout << "Right Pressed" << std::endl;};
-  clickable_.OnHoverEnter = [] () {std::cout << "Hover Enter" << std::endl;};
-  clickable_.OnHoverExit = [] () {std::cout << "Hover Exit" << std::endl;};
 
 
   dt = 0.f;
@@ -55,29 +44,28 @@ void game::run()
 {
   Setup();
 
-
   while (window_.isOpen())
   {
     dt = clock_.restart().asSeconds();
-    sf::Vector2f mouseWorld = window_.mapPixelToCoords(sf::Mouse::getPosition(window_));
     while (const std::optional event = window_.pollEvent()) {
       HandleEvents(event);
-      clickable_.HandleEvent(event);
+      //clickable_.HandleEvent(event);
+      button.HandleEvent(event);
+      button2.HandleEvent(event);
     }
 
     window_.clear();
 
-
-    //npc.Update(dt);
     npc_manager_.Update(dt);
 
     //update graphic
-    tilemap_.Draw(window_);
-    //npc.Draw(_window);
-    npc_manager_.Draw(window_);
-    window_.draw(rect_);
     window_.setView(view);
-    //std::cout << "Mouse world coords: " << mouseWorld.x << ", " << mouseWorld.y << "\n";
+    tilemap_.Draw(window_);
+    npc_manager_.Draw(window_);
+
+    window_.setView(UIview);
+    button.Draw(window_);
+    button2.Draw(window_);
     window_.display();
   }
 }
