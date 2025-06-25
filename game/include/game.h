@@ -12,7 +12,7 @@
 namespace game
 {
     void run();
-    void HandleEvents();
+    void HandleEvents(std::optional<sf::Event> evt);
 
 };
 
