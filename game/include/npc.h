@@ -41,6 +41,7 @@ public:
   Status IsHungry();
   Status Eat();
   Status findResource();
+  Status findHome();
   Status GoToResource();
   Status ChopTree();
   Status Sleep();
@@ -54,6 +55,7 @@ public:
   bool target_reachable_ = false;
   float target_distance_ = 20;
   bool is_eating_ = false;
+  sf::Vector2f destination_;
 
   //motion
 

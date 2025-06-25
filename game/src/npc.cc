@@ -6,23 +6,17 @@
 Npc::Npc() : textures("../assets/iaTextures/") {}
 
 
-Status Npc::Move(){
+Status Npc::Move() {
 
-  if (!target_reachable_) {
-    std::cout << "Not reachable" << target_reachable_ << std::endl;
-    //Si la target n'est pas accessible par l'aStar
-    return Status::kFailure;
-  } else {
-    std::cout << "I'm moving (distance = " << target_distance_ << ")" << std::endl;
-    if (target_distance_ >= 0.15f) {
-      // still arriving, return running
-      target_distance_ -= kMovingSpeed;
-      return Status::kRunning;
-    } else {
-      // if destination reached, return success
-      return Status::kSuccess;
-    }
+  if (motor_.GetPosition().x == destination_.x
+    && motor_.GetPosition().y == destination_.y)
+  {
+    //std::cout << "I'm at the resource" << std::endl;
+    return Status::kSuccess;
   }
+  else
+    //std::cout << "going to the resource" << std::endl;
+      return Status::kRunning;
 }
 
 Status Npc::Eat() {
@@ -42,35 +36,44 @@ Status Npc::Eat() {
 
 }
 Status Npc::findResource() {
+  destination_ = NearestResource(tileMap_->GetCollectablesTrees());
 
-//TODO : change the end point to something than can evolve. NPC must be able to find is home too, or another tree.
-  Path path = motion::Astar::GetPath(
-      motor_.GetPosition(), NearestResource(tileMap_->GetCollectablesTrees()),
-      tileMap_->GetWalkables());
+  // TODO : change the end point to something than can evolve. NPC must be able to find is home too, or another tree.
+  Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_,
+                                     tileMap_->GetWalkables());
 
   if (path.IsValid()) {
     SetPath(path);
-    //std::cout << "path found !" << std::endl;
+    // std::cout << "path found !" << std::endl;
     return Status::kSuccess;
-  }
-  else {
+  } else {
     return Status::kFailure;
   }
-
-
 }
-Status Npc::GoToResource() {
+Status Npc::findHome() {
+  destination_ = {256, 256};
+  Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_, tileMap_->GetWalkables());
 
-  if (motor_.GetPosition().x == NearestResource(tileMap_->GetCollectablesTrees()).x
-    && motor_.GetPosition().y == NearestResource(tileMap_->GetCollectablesTrees()).y)
-  {
-    //std::cout << "I'm at the resource" << std::endl;
+  if (path.IsValid()) {
+    SetPath(path);
+    // std::cout << "path found !" << std::endl;
     return Status::kSuccess;
+  } else {
+    return Status::kFailure;
   }
-  else
-    //std::cout << "going to the resource" << std::endl;
-    return Status::kRunning;
 }
+// Status Npc::GoToResource() {
+//
+//   if (motor_.GetPosition().x == destination_.x
+//     && motor_.GetPosition().y == destination_.y)
+//   {
+//     //std::cout << "I'm at the resource" << std::endl;
+//     return Status::kSuccess;
+//   }
+//   else
+//     //std::cout << "going to the resource" << std::endl;
+//     return Status::kRunning;
+// }
 
 Status Npc::ChopTree() {
   //std::cout << "Chopping tree" << std::endl;
@@ -103,10 +106,8 @@ sf::Vector2f Npc::NearestResource(const std::vector<sf::Vector2f>& collectables)
 Status Npc::IsHungry()
 {
   if (hunger_ >= 100) {
-    //std::cout << "I'm hungry, wanna eat........" << std::endl;
     return Status::kSuccess;
   }
-  //std::cout << "I'm not hungry, thanks........" << std::endl;
   return Status::kFailure;
 }
 
@@ -115,22 +116,21 @@ void Npc::SetupBehaviourTree(){
   auto feedSequence = std::make_unique<Sequence>();
 
   feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::IsHungry, this)));
+  feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::findHome, this)));
+  feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
   feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Eat, this)));
 
   auto workSequence = std::make_unique<Sequence>();
 
   workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::findResource, this)));
-  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::GoToResource, this)));
+  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
   workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::ChopTree, this)));
 
   auto selector = std::make_unique<Selector>();
-  // Attach the sequence to the selector
 
   selector->AddChild(std::move(feedSequence));
   selector->AddChild(std::move(workSequence));
 
-
-  // Idle sequence
   selector->AddChild(std::make_unique<Action>([this]() {
       //hunger_ += kHungerRate * 5;
       //std::cout << "I'm sleeping" << std::endl;

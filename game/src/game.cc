@@ -68,14 +68,14 @@ void game::HandleEvents()
       _window.close();
     }
 
-    if (const auto* mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
+    if (const auto mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
       if (mouseClick->button == sf::Mouse::Button::Left)
       {
         dragging = true;
         lastMousePos = sf::Mouse::getPosition(_window);
       }
     }
-      if (const auto* mouseClick = event->getIf<sf::Event::MouseButtonReleased>())
+      if (const auto mouseClick = event->getIf<sf::Event::MouseButtonReleased>())
       {
         if (mouseClick->button == sf::Mouse::Button::Left)
         {
@@ -90,7 +90,7 @@ void game::HandleEvents()
         view.move(delta);
         lastMousePos = currentMousePos;
       }
-    if (const auto* wheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()) {
+    if (const auto wheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()) {
       if (wheelScrolled->delta > 0) {
         view.zoom(0.9f);
       }
