@@ -19,7 +19,7 @@ namespace
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
-  game::ui::Button button({100, 100});
+  //std::unique_ptr<game::ui::Button> button;
   game::ui::Button button2({100, 170});
 
 }  // namespace
@@ -39,6 +39,8 @@ static void Setup()
   npc_manager_.Add({256, 256},tilemap_ptr_.get());
   npc_manager_.Add({224, 224},tilemap_ptr_.get());
 
+  button2.OnReleasedLeft = [] () {npc_manager_.Add(TileMap::TilePos(sf::Mouse::getPosition(window_)),tilemap_ptr_.get());};
+
   dt = 0.f;
 }
 
@@ -52,7 +54,7 @@ void game::run()
     while (const std::optional event = window_.pollEvent()) {
       HandleEvents(event);
       //clickable_.HandleEvent(event);
-      button.HandleEvent(event);
+      //button.HandleEvent(event);
       button2.HandleEvent(event);
     }
 
@@ -68,7 +70,7 @@ void game::run()
 
     //update UI
     window_.setView(UIview);
-    button.Draw(window_);
+    //button.Draw(window_);
     button2.Draw(window_);
 
     //draw everything

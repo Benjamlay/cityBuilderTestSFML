@@ -13,10 +13,6 @@ game::ui::Button::Button(sf::Vector2f position_) {
   OnHoverEnter = [this] () {shape_.setScale({1.2f, 1.2f});
   };
   OnHoverExit = [this] () {shape_.setScale({1.0f, 1.0f});};
-  OnPressedLeft = [&] () {std::cout << "Pressed Left" << std::endl;};
-  OnPressedRight = [] () {std::cout << "Pressed Right" << std::endl;};
-  OnReleasedLeft = [] () {std::cout << "Released Left" << std::endl;};
-  OnReleasedRight = [] () {std::cout << "Released Right" << std::endl;};
 }
 
 

@@ -1,6 +1,8 @@
 ﻿#ifndef NPC_FACTORY_H
 #define NPC_FACTORY_H
 
+#include "npc.h"
+
 
 namespace game::ai {
 

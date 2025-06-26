@@ -14,7 +14,6 @@ class Button : public Clickable {
 
  public:
   Button(sf::Vector2f position_);
-  void SpawnNpc(ai::NpcManager npc_manager_, auto tilemap_ptr_);
   void Draw(sf::RenderWindow& window);
 };
 }  // namespace game::ui
