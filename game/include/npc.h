@@ -22,7 +22,7 @@ class Npc {
   motor motor_;
   Path path_;
 
-  const TileMap* tileMap_;
+  TileMap* tileMap_;
 
   static constexpr float kHungerRate = 1.0f;
   static constexpr float kMovingSpeed = 50.0f;
@@ -31,7 +31,7 @@ class Npc {
 public:
 
   explicit Npc();
-  void Setup(const TileMap* tileMap);
+  void Setup(sf::Vector2f startPosition, TileMap* tileMap);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
   motor getMotor() const;
@@ -42,12 +42,11 @@ public:
   Status Eat();
   Status findResource();
   Status findHome();
-  Status GoToResource();
   Status ChopTree();
   Status Sleep();
 
 
-  sf::Vector2f NearestResource(const std::vector<sf::Vector2f>& collectables);
+  sf::Vector2f NearestResource(std::vector<sf::Vector2f>& collectibles);
   void SetupBehaviourTree();
 
   int hunger_;
@@ -56,6 +55,7 @@ public:
   float target_distance_ = 20;
   bool is_eating_ = false;
   sf::Vector2f destination_;
+  sf::Vector2f start_position_;
 
   //motion
 

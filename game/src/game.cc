@@ -14,13 +14,13 @@ namespace
   bool dragging_ = false;
 
   sf::Vector2i lastMousePos;
-  TileMap tilemap_;
-  //Npc npc;
+  auto tilemap_ptr_ = std::make_unique<TileMap>();
+
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
   game::ui::Button button({100, 100});
-  game::ui::Button button2({100, 240});
+  game::ui::Button button2({100, 170});
 
 }  // namespace
 
@@ -30,12 +30,14 @@ static void Setup()
   window_.create(sf::VideoMode({1000, 1000}), "City Builder");
 
   int mapSeed = 4345;
-  tilemap_.Setup(mapSeed);
-  //npc.Setup(&tilemap_);
-  npc_manager_.Add(&tilemap_);
-  //npc_manager_.Add(&tilemap_);
 
+  //tilemap_.Setup(mapSeed);
+  tilemap_ptr_->Setup(mapSeed);
 
+  npc_manager_.Add({1024, 256},tilemap_ptr_.get());
+  npc_manager_.Add({256, 1024},tilemap_ptr_.get());
+  npc_manager_.Add({256, 256},tilemap_ptr_.get());
+  npc_manager_.Add({224, 224},tilemap_ptr_.get());
 
   dt = 0.f;
 }
@@ -59,13 +61,17 @@ void game::run()
     npc_manager_.Update(dt);
 
     //update graphic
+
     window_.setView(view);
-    tilemap_.Draw(window_);
+    tilemap_ptr_->Draw(window_);
     npc_manager_.Draw(window_);
 
+    //update UI
     window_.setView(UIview);
     button.Draw(window_);
     button2.Draw(window_);
+
+    //draw everything
     window_.display();
   }
 }

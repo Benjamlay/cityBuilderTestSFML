@@ -8,11 +8,11 @@ namespace game::ai {
 
   class NpcManager {
 
-    std::vector<Npc> npcs_;
+    std::vector<std::unique_ptr<Npc>> npcs_;
 
     public:
 
-    void Add(const TileMap *tilemap);
+    void Add(sf::Vector2f startPosition, TileMap *tilemap);
     void Update(float dt);
     void Draw(sf::RenderWindow &window);
     void GetHitBox();

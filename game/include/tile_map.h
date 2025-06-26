@@ -36,8 +36,8 @@ class TileMap {
 
   static sf::Vector2f ScreenPosition(int index);
   std::vector<sf::Vector2f> walkables_;
-  std::vector<sf::Vector2f> collectables_trees_;
-  std::vector<sf::Vector2f> collectables_rocks_;
+  std::vector<sf::Vector2f> collectibles_trees_;
+  std::vector<sf::Vector2f> collectibles_rocks_;
   int seed_;
 
 public:
@@ -45,10 +45,11 @@ public:
   void Setup(int seed);
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
+  static sf::Vector2f TilePos(sf::Vector2i);
 
-  std::vector<sf::Vector2f> GetWalkables() const;
-  std::vector<sf::Vector2f> GetCollectablesTrees() const;
-  std::vector<sf::Vector2f> GetCollectablesRocks() const;
+  std::vector<sf::Vector2f> GetWalkables();
+  std::vector<sf::Vector2f> &GetCollectablesTrees();
+  std::vector<sf::Vector2f> GetCollectablesRocks();
 
 };
 

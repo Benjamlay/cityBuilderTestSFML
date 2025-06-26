@@ -4,10 +4,12 @@
 
 namespace game::ai {
 
-inline void CreateNpc(std::vector<Npc> &npcs/*, NpcType type*/, const TileMap *tilemap) {
-  npcs.emplace_back();
+inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs,sf::Vector2f startPosition,TileMap *tilemap) {
 
-  npcs.back().Setup(tilemap);
+  auto npc = std::make_unique<Npc>();
+
+  npc->Setup(startPosition, tilemap);
+  npcs.emplace_back(std::move(npc));
 
 }
 }

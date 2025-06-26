@@ -68,12 +68,17 @@ TileMap::Tile TileMap::GetTileType(float value) {
 
 sf::Vector2f TileMap::ScreenPosition(const int index) {
 
-
   float x = ceil((index % (kWidth / kPixelStep)) * kPixelStep);
   float y = ceil((index / (kWidth / kPixelStep)) * kPixelStep);
 
   return {x, y};
 }
+
+sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
+  return {static_cast<float>(ceil(pos.x / kPixelStep) * kPixelStep),
+          static_cast<float>(ceil(pos.y / kPixelStep) * kPixelStep)};
+}
+
 TileMap::TileMap() : textures("../assets/textures/") {}
 
 
@@ -106,16 +111,16 @@ void TileMap::Setup(int seed) {
 
       if (value > 0.5f && value < 0.75f) {
         resources_[index] = resourceType::ROCK;
-        collectables_rocks_.push_back(pos);
+        collectibles_rocks_.push_back(pos);
       }
       else if (value > 0.85f) {
         resources_[index] = resourceType::TREE;
-        collectables_trees_.push_back(pos);
+        collectibles_trees_.push_back(pos);
       }
       else {
         resources_[index] = resourceType::EMPTY;
       }
-      if (value > 0.2f)
+      if (value > 0.01f)
       {
         walkables_.push_back(pos);
       }
@@ -126,10 +131,10 @@ void TileMap::Setup(int seed) {
     //std::cout << tiles_.size() << std::endl;
 
 }
-std::vector<sf::Vector2f> TileMap::GetWalkables() const { return walkables_; }
-std::vector<sf::Vector2f> TileMap::GetCollectablesTrees() const {
-  return collectables_trees_;
+std::vector<sf::Vector2f> TileMap::GetWalkables() { return walkables_; }
+std::vector<sf::Vector2f> &TileMap::GetCollectablesTrees() {
+  return collectibles_trees_;
 }
-std::vector<sf::Vector2f> TileMap::GetCollectablesRocks() const {return collectables_rocks_;}
+std::vector<sf::Vector2f> TileMap::GetCollectablesRocks(){return collectibles_rocks_;}
 
 
