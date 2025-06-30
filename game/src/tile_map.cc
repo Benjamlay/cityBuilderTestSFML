@@ -85,7 +85,6 @@ TileMap::TileMap() : textures("../assets/textures/") {}
 void TileMap::Setup(int seed) {
   seed_ = seed;
   textures.Load_All();
-
   Perlin perlin(seed_);
   std::vector noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));
 
@@ -127,9 +126,7 @@ void TileMap::Setup(int seed) {
     }
   }
 
-    std::cout << walkables_.size() << std::endl;
-    //std::cout << tiles_.size() << std::endl;
-
+  SetZone(sf::IntRect({0, 0}, sf::Vector2i(kWidth, kHeight)));
 }
 std::vector<sf::Vector2f> TileMap::GetWalkables() { return walkables_; }
 std::vector<sf::Vector2f> &TileMap::GetCollectablesTrees() {

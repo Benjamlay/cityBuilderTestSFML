@@ -7,13 +7,14 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 
+#include "UI/clickable.h"
 #include "_assets/asset_manager.h"
 
 constexpr int kWidth = 2000;
 constexpr int kHeight = 2000;
 constexpr int kPixelStep = 16;
 
-class TileMap {
+class TileMap : public game::ui::Clickable {
 
   enum class Tile {
     EMPTY,

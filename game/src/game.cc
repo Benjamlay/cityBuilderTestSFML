@@ -38,8 +38,14 @@ static void Setup()
   npc_manager_.Add({256, 1024},tilemap_ptr_.get());
   npc_manager_.Add({256, 256},tilemap_ptr_.get());
   npc_manager_.Add({224, 224},tilemap_ptr_.get());
+  npc_manager_.Add(tilemap_ptr_->TilePos({680, 920}),tilemap_ptr_.get());
 
-  button2.OnReleasedLeft = [] () {npc_manager_.Add(TileMap::TilePos(sf::Mouse::getPosition(window_)),tilemap_ptr_.get());};
+
+  tilemap_ptr_->OnReleasedRight = [] () {
+
+    std::cout << "adding npc" << std::endl;
+    npc_manager_.Add(TileMap::TilePos(sf::Mouse::getPosition(window_)),tilemap_ptr_.get());
+  };
 
   dt = 0.f;
 }
@@ -53,9 +59,9 @@ void game::run()
     dt = clock_.restart().asSeconds();
     while (const std::optional event = window_.pollEvent()) {
       HandleEvents(event);
-      //clickable_.HandleEvent(event);
       //button.HandleEvent(event);
       button2.HandleEvent(event);
+      tilemap_ptr_->HandleEvent(event);
     }
 
     window_.clear();
@@ -73,7 +79,7 @@ void game::run()
     //button.Draw(window_);
     button2.Draw(window_);
 
-    //draw everything
+    //display everything
     window_.display();
   }
 }
