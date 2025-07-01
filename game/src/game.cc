@@ -28,7 +28,6 @@ namespace
 static void Setup()
 {
   window_.create(sf::VideoMode({1000, 1000}), "City Builder");
-
   int mapSeed = 4345;
 
   //tilemap_.Setup(mapSeed);
@@ -38,7 +37,7 @@ static void Setup()
   npc_manager_.Add({256, 1024},tilemap_ptr_.get());
   npc_manager_.Add({256, 256},tilemap_ptr_.get());
   npc_manager_.Add({224, 224},tilemap_ptr_.get());
-  npc_manager_.Add(tilemap_ptr_->TilePos({680, 920}),tilemap_ptr_.get());
+  //npc_manager_.Add(tilemap_ptr_->TilePos({680, 920}),tilemap_ptr_.get());
 
 
   tilemap_ptr_->OnReleasedRight = [] () {

@@ -42,18 +42,17 @@ public:
   Status Eat();
   Status findResource();
   Status findHome();
-  Status ChopTree();
-  Status Sleep();
-
+  Status StartChoping();
+  Status ChopingTree();
+  //Status Sleep();
 
   sf::Vector2f NearestResource(std::vector<sf::Vector2f>& collectibles);
   void SetupBehaviourTree();
 
   int hunger_;
-  bool resource_available_ = true;
-  bool target_reachable_ = false;
-  float target_distance_ = 20;
+  int chooping_timer_;
   bool is_eating_ = false;
+  bool is_chooping = false;
   sf::Vector2f destination_;
   sf::Vector2f start_position_;
 

@@ -55,10 +55,20 @@ Status Npc::findHome() {
   }
 }
 
-Status Npc::ChopTree() {
-  //std::cout << "Chopping tree" << std::endl;
-
+Status Npc::StartChoping() {
+  // std::cout << "Chopping tree" << std::endl;
+  is_chooping = true;
+  chooping_timer_ = 100;
   return Status::kSuccess;
+}
+Status Npc::ChopingTree() {
+
+  if (chooping_timer_ <= 0){
+    is_chooping = false;
+    chooping_timer_ = 0;
+    return Status::kSuccess;
+  }
+  return Status::kRunning;
 }
 
 sf::Vector2f Npc::NearestResource(std::vector<sf::Vector2f>& collectables) {
@@ -68,7 +78,6 @@ sf::Vector2f Npc::NearestResource(std::vector<sf::Vector2f>& collectables) {
   float min_distance = std::numeric_limits<float>::max();
   sf::Vector2f nearest_resource;
   auto nearest_it = collectables.end();
-
   for (auto it = collectables.begin(); it != collectables.end(); ++it) {
     float dx = it->x - position.x;
     float dy = it->y - position.y;
@@ -80,13 +89,10 @@ sf::Vector2f Npc::NearestResource(std::vector<sf::Vector2f>& collectables) {
       nearest_it = it;
     }
   }
-
   if (nearest_it != collectables.end()) {
     collectables.erase(nearest_it);
   }
-
   return nearest_resource;
-
 }
 
 Status Npc::IsHungry()
@@ -110,7 +116,8 @@ void Npc::SetupBehaviourTree(){
 
   workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::findResource, this)));
   workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
-  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::ChopTree, this)));
+  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::StartChoping, this)));
+  workSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::ChopingTree, this)));
 
   auto selector = std::make_unique<Selector>();
 
@@ -118,7 +125,6 @@ void Npc::SetupBehaviourTree(){
   selector->AddChild(std::move(workSequence));
 
   selector->AddChild(std::make_unique<Action>([this]() {
-      //hunger_ += kHungerRate * 5;
       //std::cout << "I'm sleeping" << std::endl;
       return Status::kSuccess;
   }));
@@ -146,6 +152,9 @@ void Npc::Update(float dt)
 
   if (!is_eating_) {
     hunger_ += kHungerRate;
+  }
+  if (is_chooping) {
+    chooping_timer_--;
   }
   if (path_.IsValid()){
     motor_.Update(dt);
