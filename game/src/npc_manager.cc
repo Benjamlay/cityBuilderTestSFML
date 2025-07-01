@@ -1,6 +1,6 @@
-﻿#include "npc_manager.h"
+﻿#include "../include/AI/npc_manager.h"
 
-#include "npc_factory.h"
+#include "../include/AI/npc_factory.h"
 
 namespace game::ai {
 

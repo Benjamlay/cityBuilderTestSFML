@@ -3,7 +3,6 @@
 
 #include "npc.h"
 
-
 namespace game::ai {
 
 inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs,sf::Vector2f startPosition,TileMap *tilemap) {

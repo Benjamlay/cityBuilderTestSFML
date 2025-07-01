@@ -2,9 +2,9 @@
 #define BUTTON_H
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include "../AI/npc_factory.h"
+#include "../AI/npc_manager.h"
 #include "clickable.h"
-#include "npc_factory.h"
-#include "npc_manager.h"
 
 namespace game::ui {
 

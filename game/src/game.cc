@@ -1,10 +1,10 @@
 ﻿#include "../include/game.h"
 
+#include "../include/AI/npc.h"
+#include "../include/AI/npc_manager.h"
 #include "../include/tile_map.h"
 #include "UI/button.h"
 #include "UI/clickable.h"
-#include "npc.h"
-#include "npc_manager.h"
 
 namespace
 {
@@ -43,7 +43,8 @@ static void Setup()
   tilemap_ptr_->OnReleasedRight = [] () {
 
     std::cout << "adding npc" << std::endl;
-    npc_manager_.Add(TileMap::TilePos(sf::Mouse::getPosition(window_)),tilemap_ptr_.get());
+    sf::Vector2i spawnPoint = window_.mapCoordsToPixel(TileMap::TilePos(sf::Mouse::getPosition(window_)));
+    npc_manager_.Add(TileMap::TilePos(spawnPoint),tilemap_ptr_.get());
   };
 
   dt = 0.f;

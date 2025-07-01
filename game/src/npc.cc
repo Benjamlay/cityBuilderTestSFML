@@ -1,4 +1,4 @@
-﻿#include "npc.h"
+﻿#include "../include/AI/npc.h"
 
 #include "ai/bt_sequence.h"
 #include "motion/a_star.h"
@@ -57,15 +57,15 @@ Status Npc::findHome() {
 
 Status Npc::StartChoping() {
   // std::cout << "Chopping tree" << std::endl;
-  is_chooping = true;
-  chooping_timer_ = 100;
+  is_choping = true;
+  choping_timer_ = 100;
   return Status::kSuccess;
 }
 Status Npc::ChopingTree() {
 
-  if (chooping_timer_ <= 0){
-    is_chooping = false;
-    chooping_timer_ = 0;
+  if (choping_timer_ <= 0){
+    is_choping = false;
+    choping_timer_ = 0;
     return Status::kSuccess;
   }
   return Status::kRunning;
@@ -135,6 +135,7 @@ void Npc::SetupBehaviourTree(){
 void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap)
 {
   textures.Load("guy", textures.folder_ + "guy.png");
+  textures.Load("house", textures.folder_ + "house.png");
   start_position_ = startPosition;
   hunger_ = 0;
   motor_.SetPosition(startPosition);
@@ -153,8 +154,8 @@ void Npc::Update(float dt)
   if (!is_eating_) {
     hunger_ += kHungerRate;
   }
-  if (is_chooping) {
-    chooping_timer_--;
+  if (is_choping) {
+    choping_timer_--;
   }
   if (path_.IsValid()){
     motor_.Update(dt);
@@ -166,10 +167,14 @@ void Npc::Update(float dt)
 
 void Npc::Draw(sf::RenderWindow& window) {
   sf::Sprite GuySprite(textures.GetTexture("guy"));
+  sf::Sprite HouseSprite(textures.GetTexture("house"));
   GuySprite.setPosition(motor_.GetPosition());
+  HouseSprite.setPosition(start_position_);
   window.draw(GuySprite);
+  window.draw(HouseSprite);
 }
 motor Npc::getMotor() const { return motor_; }
+
 
 sf::FloatRect Npc::GetHitBox() {
   sf::Sprite GuySprite(textures.GetTexture("guy"));

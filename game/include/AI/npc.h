@@ -1,13 +1,12 @@
 ﻿#ifndef NPC_H
 #define NPC_H
 #include <SFML/Graphics.hpp>
-
+#include "../motion/motor.h"
+#include "../motion/path.h"
+#include "../tile_map.h"
 #include "_assets/asset_manager.h"
 #include "ai/bt_action.h"
 #include "ai/bt_selector.h"
-#include "motion/motor.h"
-#include "motion/path.h"
-#include "tile_map.h"
 
 using namespace core::ai::behaviour_tree;
 using namespace core::motion;
@@ -18,7 +17,6 @@ class Npc {
   AssetManager<sf::Texture> textures;
   std::unique_ptr<Node> root_;
   sf::FloatRect hit_box_;
-
   motor motor_;
   Path path_;
 
@@ -50,9 +48,9 @@ public:
   void SetupBehaviourTree();
 
   int hunger_;
-  int chooping_timer_;
+  int choping_timer_;
   bool is_eating_ = false;
-  bool is_chooping = false;
+  bool is_choping = false;
   sf::Vector2f destination_;
   sf::Vector2f start_position_;
 
