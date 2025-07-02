@@ -43,7 +43,7 @@ class TileMap : public game::ui::Clickable {
 
 public:
   explicit TileMap();
-  void Setup(int seed);
+  void Setup(int seed, std::vector<sf::Vector2f>& resources);
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
   static sf::Vector2f TilePos(sf::Vector2i);

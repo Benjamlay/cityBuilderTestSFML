@@ -91,12 +91,13 @@ sf::Vector2f Npc::NearestResource(std::vector<sf::Vector2f>& collectables) {
   }
   if (nearest_it != collectables.end()) {
     collectables.erase(nearest_it);
+    // TODO :1. The collectables management should not be handled within the Npc class
+    //TODO :2. when the resource will be handled in a resource class, make 2 counters for each resource type to be able to quantify them
   }
   return nearest_resource;
 }
 
-Status Npc::IsHungry()
-{
+Status Npc::IsHungry() {
   if (hunger_ >= 100) {
     return Status::kSuccess;
   }

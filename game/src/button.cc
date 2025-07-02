@@ -8,6 +8,7 @@ game::ui::Button::Button(sf::Vector2f position_) {
   shape_.setOutlineThickness(5);
   shape_.setPosition(position_);
   shape_.setOrigin({shape_.getSize().x/2, shape_.getSize().y/2});
+  //text_.setFont();
   SetZone({static_cast<sf::IntRect>(shape_.getGlobalBounds())});
 
   OnHoverEnter = [this] () {shape_.setScale({1.2f, 1.2f});

@@ -10,7 +10,7 @@ namespace game::ui {
 
 class Button : public Clickable {
   sf::RectangleShape shape_;
-  // sf::Texture texture_;
+  //sf::Text text_;
 
  public:
   Button(sf::Vector2f position_);

@@ -82,7 +82,7 @@ sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
 TileMap::TileMap() : textures("../assets/textures/") {}
 
 
-void TileMap::Setup(int seed) {
+void TileMap::Setup(int seed, std::vector<sf::Vector2f>& resources) {
   seed_ = seed;
   textures.Load_All();
   Perlin perlin(seed_);
@@ -111,10 +111,12 @@ void TileMap::Setup(int seed) {
       if (value > 0.5f && value < 0.75f) {
         resources_[index] = resourceType::ROCK;
         collectibles_rocks_.push_back(pos);
+        //resources.push_back(pos);
       }
       else if (value > 0.85f) {
         resources_[index] = resourceType::TREE;
         collectibles_trees_.push_back(pos);
+        resources.push_back(pos);
       }
       else {
         resources_[index] = resourceType::EMPTY;
@@ -129,9 +131,5 @@ void TileMap::Setup(int seed) {
   SetZone(sf::IntRect({0, 0}, sf::Vector2i(kWidth, kHeight)));
 }
 std::vector<sf::Vector2f> TileMap::GetWalkables() { return walkables_; }
-std::vector<sf::Vector2f> &TileMap::GetCollectablesTrees() {
-  return collectibles_trees_;
-}
+std::vector<sf::Vector2f> &TileMap::GetCollectablesTrees() {return collectibles_trees_;}
 std::vector<sf::Vector2f> &TileMap::GetCollectablesRocks() {return collectibles_rocks_;}
-
-

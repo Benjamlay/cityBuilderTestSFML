@@ -5,6 +5,7 @@
 #include "../include/tile_map.h"
 #include "UI/button.h"
 #include "UI/clickable.h"
+#include "resources/resource_manager.h"
 
 namespace
 {
@@ -19,8 +20,9 @@ namespace
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
-  //std::unique_ptr<game::ui::Button> button;
   game::ui::Button button2({100, 170});
+  sf::RectangleShape woodCounter;
+  ResourceManager woodResourceManager;
 
 }  // namespace
 
@@ -30,20 +32,23 @@ static void Setup()
   window_.create(sf::VideoMode({1000, 1000}), "City Builder");
   int mapSeed = 4345;
 
-  //tilemap_.Setup(mapSeed);
-  tilemap_ptr_->Setup(mapSeed);
+  woodCounter.setSize({100, 100});
+  woodCounter.setFillColor(sf::Color::Green);
+  woodCounter.setPosition({100, 100});
+  woodCounter.setOrigin({50, 50});
+  tilemap_ptr_->Setup(mapSeed, woodResourceManager.GetResources());
 
-  npc_manager_.Add({1024, 256},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesRocks());
-  npc_manager_.Add({256, 1024},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesTrees());
-  npc_manager_.Add({256, 256},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesTrees());
-  npc_manager_.Add({224, 224},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesRocks());
+  npc_manager_.Add({1024, 256},tilemap_ptr_.get(), woodResourceManager.GetResources());
+  npc_manager_.Add({256, 1024},tilemap_ptr_.get(), woodResourceManager.GetResources());
+  npc_manager_.Add({256, 256},tilemap_ptr_.get(), woodResourceManager.GetResources());
+  npc_manager_.Add({224, 224},tilemap_ptr_.get(), woodResourceManager.GetResources());
 
-
+std::cout << "wood count: " << woodResourceManager.GetResources().size() << std::endl;
   tilemap_ptr_->OnReleasedRight = [] () {
 
     std::cout << "adding npc" << std::endl;
-    sf::Vector2i spawnPoint = window_.mapCoordsToPixel(TileMap::TilePos(sf::Mouse::getPosition(window_)));
-    npc_manager_.Add(TileMap::TilePos(spawnPoint),tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesTrees());
+    sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
+    npc_manager_.Add(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),tilemap_ptr_.get(), woodResourceManager.GetResources());
   };
 
   dt = 0.f;
