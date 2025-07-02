@@ -48,7 +48,7 @@ public:
   Tile GetTileType(float value);
   static sf::Vector2f TilePos(sf::Vector2i);
 
-  std::vector<sf::Vector2f> GetWalkables();
+  std::vector<sf::Vector2f> &GetWalkables();
   std::vector<sf::Vector2f> &GetCollectablesTrees();
   std::vector<sf::Vector2f> &GetCollectablesRocks();
 

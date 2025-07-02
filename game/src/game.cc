@@ -39,9 +39,9 @@ static void Setup()
   tilemap_ptr_->Setup(mapSeed, woodResourceManager.GetResources());
 
   npc_manager_.Add({1024, 256},tilemap_ptr_.get(), woodResourceManager.GetResources());
-  npc_manager_.Add({256, 1024},tilemap_ptr_.get(), woodResourceManager.GetResources());
-  npc_manager_.Add({256, 256},tilemap_ptr_.get(), woodResourceManager.GetResources());
-  npc_manager_.Add({224, 224},tilemap_ptr_.get(), woodResourceManager.GetResources());
+  // npc_manager_.Add({256, 1024},tilemap_ptr_.get(), woodResourceManager.GetResources());
+  // npc_manager_.Add({256, 256},tilemap_ptr_.get(), woodResourceManager.GetResources());
+  // npc_manager_.Add({224, 224},tilemap_ptr_.get(), woodResourceManager.GetResources());
 
 std::cout << "wood count: " << woodResourceManager.GetResources().size() << std::endl;
   tilemap_ptr_->OnReleasedRight = [] () {

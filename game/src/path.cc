@@ -1,5 +1,7 @@
 ﻿#include "motion/path.h"
 
+#include <__msvc_ostream.hpp>
+#include <iostream>
 
 bool core::motion::Path::IsDone() const {
   return idxPoint_ == path_points_.size() -1;
@@ -13,7 +15,7 @@ sf::Vector2f core::motion::Path::GetNextPoint() {
   if (!IsDone()) {
     ++idxPoint_;
   }
-
+  std::cout << "next point : " << idxPoint_ << std::endl;
   return path_points_[idxPoint_];
 }
 

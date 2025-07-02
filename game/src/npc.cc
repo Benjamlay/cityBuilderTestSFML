@@ -160,6 +160,7 @@ void Npc::Update(float dt)
   if (is_choping) {
     choping_timer_--;
   }
+
   if (path_.IsValid()){
     motor_.Update(dt);
     if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {

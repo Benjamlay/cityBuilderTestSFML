@@ -121,7 +121,8 @@ void TileMap::Setup(int seed, std::vector<sf::Vector2f>& resources) {
       else {
         resources_[index] = resourceType::EMPTY;
       }
-      if (value > 0.01f)
+
+      if (tiles_[index] != Tile::WATER)
       {
         walkables_.push_back(pos);
       }
@@ -130,6 +131,6 @@ void TileMap::Setup(int seed, std::vector<sf::Vector2f>& resources) {
 
   SetZone(sf::IntRect({0, 0}, sf::Vector2i(kWidth, kHeight)));
 }
-std::vector<sf::Vector2f> TileMap::GetWalkables() { return walkables_; }
+std::vector<sf::Vector2f> &TileMap::GetWalkables() { return walkables_; }
 std::vector<sf::Vector2f> &TileMap::GetCollectablesTrees() {return collectibles_trees_;}
 std::vector<sf::Vector2f> &TileMap::GetCollectablesRocks() {return collectibles_rocks_;}
