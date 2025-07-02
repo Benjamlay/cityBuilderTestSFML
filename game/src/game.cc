@@ -33,18 +33,17 @@ static void Setup()
   //tilemap_.Setup(mapSeed);
   tilemap_ptr_->Setup(mapSeed);
 
-  npc_manager_.Add({1024, 256},tilemap_ptr_.get());
-  npc_manager_.Add({256, 1024},tilemap_ptr_.get());
-  npc_manager_.Add({256, 256},tilemap_ptr_.get());
-  npc_manager_.Add({224, 224},tilemap_ptr_.get());
-  //npc_manager_.Add(tilemap_ptr_->TilePos({680, 920}),tilemap_ptr_.get());
+  npc_manager_.Add({1024, 256},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesRocks());
+  npc_manager_.Add({256, 1024},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesTrees());
+  npc_manager_.Add({256, 256},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesTrees());
+  npc_manager_.Add({224, 224},tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesRocks());
 
 
   tilemap_ptr_->OnReleasedRight = [] () {
 
     std::cout << "adding npc" << std::endl;
     sf::Vector2i spawnPoint = window_.mapCoordsToPixel(TileMap::TilePos(sf::Mouse::getPosition(window_)));
-    npc_manager_.Add(TileMap::TilePos(spawnPoint),tilemap_ptr_.get());
+    npc_manager_.Add(TileMap::TilePos(spawnPoint),tilemap_ptr_.get(), tilemap_ptr_->GetCollectablesTrees());
   };
 
   dt = 0.f;
@@ -114,5 +113,6 @@ void game::HandleEvents(std::optional<sf::Event> event) {
         view.zoom(1.1f);
       }
     }
+
 }
 

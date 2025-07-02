@@ -50,7 +50,7 @@ public:
 
   std::vector<sf::Vector2f> GetWalkables();
   std::vector<sf::Vector2f> &GetCollectablesTrees();
-  std::vector<sf::Vector2f> GetCollectablesRocks();
+  std::vector<sf::Vector2f> &GetCollectablesRocks();
 
 };
 

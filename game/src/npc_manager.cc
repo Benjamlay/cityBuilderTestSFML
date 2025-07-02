@@ -4,13 +4,9 @@
 
 namespace game::ai {
 
-  void NpcManager::Add(sf::Vector2f startPosition,TileMap *tilemap) {
+  void NpcManager::Add(sf::Vector2f startPosition,TileMap *tilemap, std::vector<sf::Vector2f> &collectables) {
 
-    CreateNpc(npcs_,startPosition, tilemap);
-    // auto npc = std::make_unique<Npc>();
-    //
-    // npc->Setup(startPosition, tilemap);
-    // npcs_.emplace_back(std::move(npc));
+    CreateNpc(npcs_,startPosition, tilemap, collectables);
   }
 
   void NpcManager::Update(float dt)

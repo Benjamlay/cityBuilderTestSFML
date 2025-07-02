@@ -132,6 +132,6 @@ std::vector<sf::Vector2f> TileMap::GetWalkables() { return walkables_; }
 std::vector<sf::Vector2f> &TileMap::GetCollectablesTrees() {
   return collectibles_trees_;
 }
-std::vector<sf::Vector2f> TileMap::GetCollectablesRocks(){return collectibles_rocks_;}
+std::vector<sf::Vector2f> &TileMap::GetCollectablesRocks() {return collectibles_rocks_;}
 
 

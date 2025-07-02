@@ -29,7 +29,7 @@ Status Npc::Eat() {
 }
 
 Status Npc::findResource() {
-  destination_ = NearestResource(tileMap_->GetCollectablesTrees());
+  destination_ = NearestResource(ressources_);
 
   Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_,
                                      tileMap_->GetWalkables());
@@ -103,7 +103,9 @@ Status Npc::IsHungry()
   return Status::kFailure;
 }
 
-void Npc::SetupBehaviourTree(){
+void Npc::SetupBehaviourTree(std::vector<sf::Vector2f>& collectables){
+
+  ressources_ = collectables;
 
   auto feedSequence = std::make_unique<Sequence>();
 
@@ -132,7 +134,7 @@ void Npc::SetupBehaviourTree(){
   root_ = std::move(selector);
 }
 
-void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap)
+void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, std::vector<sf::Vector2f>& collectables)
 {
   textures.Load("guy", textures.folder_ + "guy.png");
   textures.Load("house", textures.folder_ + "house.png");
@@ -144,7 +146,7 @@ void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap)
 
   tileMap_ = tileMap;
 
-  SetupBehaviourTree();
+  SetupBehaviourTree(collectables);
 }
 
 void Npc::Update(float dt)
