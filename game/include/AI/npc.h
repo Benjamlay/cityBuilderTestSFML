@@ -19,7 +19,8 @@ class Npc {
   sf::FloatRect hit_box_;
   motor motor_;
   Path path_;
-  ResourceManager resource_manager_;
+
+  ResourceManager* resource_manager_;
   ResourceType type_;
 
   TileMap* tileMap_;
@@ -31,7 +32,7 @@ class Npc {
 public:
 
   explicit Npc();
-  void Setup(sf::Vector2f startPosition, TileMap* tileMap,  ResourceManager& resource_manager, ResourceType type);
+  void Setup(sf::Vector2f startPosition, TileMap* tileMap,  ResourceManager* resource_manager, ResourceType type);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
   motor getMotor() const;

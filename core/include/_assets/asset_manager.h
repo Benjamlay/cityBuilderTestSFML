@@ -4,6 +4,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <filesystem>
+#include <functional>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 template <typename TAsset>
 class AssetManager {
@@ -14,7 +20,7 @@ public :
 
   std::string folder_;
   explicit AssetManager(std::string_view folder);
-  void Load();
+  //void Load();
   void Load(const std::string& name, const std::string& path);
   void Load_All();
   const TAsset& Get(int index);

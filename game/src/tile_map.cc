@@ -84,7 +84,7 @@ sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
 TileMap::TileMap() : textures("../assets/textures/") {}
 
 
-void TileMap::Setup(int seed, ResourceManager &resources) {
+void TileMap::Setup(int seed, ResourceManager *resources) {
   seed_ = seed;
   textures.Load_All();
   Perlin perlin(seed_);
@@ -113,12 +113,12 @@ void TileMap::Setup(int seed, ResourceManager &resources) {
       if (value > 0.5f && value < 0.75f) {
         //resources_[index].getType() = resourceType::ROCK;
         //collectibles_rocks_.push_back(pos);
-        resources.AddRock(pos);
+        resources->AddRock(pos);
       }
       else if (value > 0.85f) {
        //resources_[index] = resourceType::TREE;
         //collectibles_trees_.push_back(pos);
-        resources.AddTree(pos);
+        resources->AddTree(pos);
 
 
       }

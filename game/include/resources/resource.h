@@ -19,6 +19,7 @@ class Resource {
 
   public:
 
+  Resource() = default;
   Resource(sf::Vector2f position, ResourceType type)
   : position_(position), type_(type){}
   sf::Vector2f GetPosition() const;

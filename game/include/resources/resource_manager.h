@@ -4,7 +4,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <memory>
 #include <vector>
-
 #include "_assets/asset_manager.h"
 #include "resource.h"
 
@@ -12,7 +11,7 @@
 
 class ResourceManager {
 
-  AssetManager<sf::Texture> textures_;
+  AssetManager<sf::Texture> textures;
   //std::vector<sf::Vector2f> resources_;
   std::vector<Resource> resources_;
 

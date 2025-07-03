@@ -22,7 +22,7 @@ namespace
   sf::Clock clock_;
   game::ui::Button button2({100, 170});
   sf::RectangleShape woodCounter;
-  ResourceManager resource_manager;
+  auto resource_manager = std::make_unique<ResourceManager>();
 
 }  // namespace
 
@@ -36,19 +36,19 @@ static void Setup()
   woodCounter.setFillColor(sf::Color::Green);
   woodCounter.setPosition({100, 100});
   woodCounter.setOrigin({50, 50});
-  tilemap_ptr_->Setup(mapSeed, resource_manager);
+  tilemap_ptr_->Setup(mapSeed, resource_manager.get());
 
-  npc_manager_.Add({1024, 256},tilemap_ptr_.get(), resource_manager, TREE);
-  npc_manager_.Add({256, 1024},tilemap_ptr_.get(), resource_manager, ROCK);
-  npc_manager_.Add({256, 256},tilemap_ptr_.get(), resource_manager, TREE);
-  npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager, ROCK);
+  npc_manager_.Add({1024, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
+  npc_manager_.Add({256, 1024},tilemap_ptr_.get(), resource_manager.get(), ROCK);
+  npc_manager_.Add({256, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
+  npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager.get(), ROCK);
 
-std::cout << "wood count: " << resource_manager.GetResources().size() << std::endl;
+std::cout << "wood count: " << resource_manager->GetResources().size() << std::endl;
   tilemap_ptr_->OnReleasedRight = [] () {
 
     std::cout << "adding npc" << std::endl;
     sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
-    npc_manager_.Add(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),tilemap_ptr_.get(), resource_manager, TREE);
+    npc_manager_.Add(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),tilemap_ptr_.get(), resource_manager.get(), TREE);
   };
 
   dt = 0.f;
@@ -76,6 +76,7 @@ void game::run()
 
     window_.setView(view);
     tilemap_ptr_->Draw(window_);
+    resource_manager->Draw(window_);
     npc_manager_.Draw(window_);
 
     //update UI

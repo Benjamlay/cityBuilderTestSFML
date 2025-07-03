@@ -7,8 +7,7 @@ Npc::Npc() : textures("../assets/iaTextures/") {}
 
 Status Npc::Move() {
 
-  if (motor_.GetPosition().x == destination_.x
-    && motor_.GetPosition().y == destination_.y)
+  if (path_.IsDone())
   {
     return Status::kSuccess;
   }
@@ -29,7 +28,7 @@ Status Npc::Eat() {
 }
 
 Status Npc::findResource() {
-  destination_ = resource_manager_.NearestResource(type_, motor_.GetPosition());
+  destination_ = resource_manager_->NearestResource(type_, motor_.GetPosition());
 
   Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_,
                                      tileMap_->GetWalkables());
@@ -110,7 +109,7 @@ void Npc::SetupBehaviourTree(){
   root_ = std::move(selector);
 }
 
-void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, ResourceManager& resource_manager, ResourceType type)
+void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, ResourceManager* resource_manager, ResourceType type)
 {
   textures.Load("guy", textures.folder_ + "guy.png");
   textures.Load("house", textures.folder_ + "house.png");

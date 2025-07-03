@@ -4,7 +4,7 @@
 
 namespace game::ai {
 
-  void NpcManager::Add(sf::Vector2f startPosition,TileMap *tilemap, ResourceManager resource_manager, ResourceType type) {
+  void NpcManager::Add(sf::Vector2f startPosition,TileMap *tilemap, ResourceManager *resource_manager, ResourceType type) {
 
     CreateNpc(npcs_,startPosition, tilemap, resource_manager, type);
   }

@@ -6,7 +6,7 @@
 namespace game::ai {
 
 inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs,sf::Vector2f startPosition,
-  TileMap *tilemap, ResourceManager resource_manager, ResourceType type) {
+  TileMap *tilemap, ResourceManager *resource_manager, ResourceType type) {
 
   auto npc = std::make_unique<Npc>();
 
