@@ -29,13 +29,12 @@ Status Npc::Eat() {
 }
 
 Status Npc::findResource() {
-  destination_ = NearestResource(ressources_);
+  destination_ = resource_manager_.NearestResource(type_, motor_.GetPosition());
 
   Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_,
                                      tileMap_->GetWalkables());
   if (path.IsValid()) {
     SetPath(path);
-    // std::cout << "path found !" << std::endl;
     return Status::kSuccess;
   } else {
     return Status::kFailure;
@@ -71,31 +70,7 @@ Status Npc::ChopingTree() {
   return Status::kRunning;
 }
 
-sf::Vector2f Npc::NearestResource(std::vector<sf::Vector2f>& collectables) {
 
-  const sf::Vector2f position = motor_.GetPosition();
-
-  float min_distance = std::numeric_limits<float>::max();
-  sf::Vector2f nearest_resource;
-  auto nearest_it = collectables.end();
-  for (auto it = collectables.begin(); it != collectables.end(); ++it) {
-    float dx = it->x - position.x;
-    float dy = it->y - position.y;
-    float distance = std::sqrt(dx * dx + dy * dy);
-
-    if (distance < min_distance) {
-      min_distance = distance;
-      nearest_resource = *it;
-      nearest_it = it;
-    }
-  }
-  if (nearest_it != collectables.end()) {
-    collectables.erase(nearest_it);
-    // TODO :1. The collectables management should not be handled within the Npc class
-    //TODO :2. when the resource will be handled in a resource class, make 2 counters for each resource type to be able to quantify them
-  }
-  return nearest_resource;
-}
 
 Status Npc::IsHungry() {
   if (hunger_ >= 100) {
@@ -104,9 +79,9 @@ Status Npc::IsHungry() {
   return Status::kFailure;
 }
 
-void Npc::SetupBehaviourTree(std::vector<sf::Vector2f>& collectables){
+void Npc::SetupBehaviourTree(){
 
-  ressources_ = collectables;
+  //ressources_ = collectables;
 
   auto feedSequence = std::make_unique<Sequence>();
 
@@ -135,19 +110,21 @@ void Npc::SetupBehaviourTree(std::vector<sf::Vector2f>& collectables){
   root_ = std::move(selector);
 }
 
-void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, std::vector<sf::Vector2f>& collectables)
+void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, ResourceManager& resource_manager, ResourceType type)
 {
   textures.Load("guy", textures.folder_ + "guy.png");
   textures.Load("house", textures.folder_ + "house.png");
   start_position_ = startPosition;
   hunger_ = 0;
   motor_.SetPosition(startPosition);
+  resource_manager_ = resource_manager;
+  type_ = type;
 
   motor_.SetSpeed(kMovingSpeed);
 
   tileMap_ = tileMap;
 
-  SetupBehaviourTree(collectables);
+  SetupBehaviourTree();
 }
 
 void Npc::Update(float dt)

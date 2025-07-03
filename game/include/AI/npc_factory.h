@@ -6,11 +6,11 @@
 namespace game::ai {
 
 inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs,sf::Vector2f startPosition,
-  TileMap *tilemap, std::vector<sf::Vector2f> &collectables) {
+  TileMap *tilemap, ResourceManager resource_manager, ResourceType type) {
 
   auto npc = std::make_unique<Npc>();
 
-  npc->Setup(startPosition, tilemap, collectables);
+  npc->Setup(startPosition, tilemap, resource_manager, type);
   npcs.emplace_back(std::move(npc));
 
 }

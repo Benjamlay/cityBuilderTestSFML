@@ -4,9 +4,9 @@
 
 namespace game::ai {
 
-  void NpcManager::Add(sf::Vector2f startPosition,TileMap *tilemap, std::vector<sf::Vector2f> &collectables) {
+  void NpcManager::Add(sf::Vector2f startPosition,TileMap *tilemap, ResourceManager resource_manager, ResourceType type) {
 
-    CreateNpc(npcs_,startPosition, tilemap, collectables);
+    CreateNpc(npcs_,startPosition, tilemap, resource_manager, type);
   }
 
   void NpcManager::Update(float dt)

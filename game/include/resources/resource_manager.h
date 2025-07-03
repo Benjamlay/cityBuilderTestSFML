@@ -5,19 +5,28 @@
 #include <memory>
 #include <vector>
 
+#include "_assets/asset_manager.h"
+#include "resource.h"
+
+
+
 class ResourceManager {
 
-  enum ResourceType {
-    kTree,
-    kRock,
-    kEmpty
-  };
-  std::vector<sf::Vector2f> resources_;
+  AssetManager<sf::Texture> textures_;
+  //std::vector<sf::Vector2f> resources_;
+  std::vector<Resource> resources_;
 
 public:
-  std::vector<sf::Vector2f>& GetResources(){return resources_;}
-  void AddResource(sf::Vector2f resource);
-  void RemoveResource(sf::Vector2f resource);
+  ResourceManager();
+  std::vector<Resource>& GetResources(){return resources_;}
+
+  void AddTree(sf::Vector2f pos);
+  void AddRock(sf::Vector2f pos);
+  void AddFlower(sf::Vector2f pos);
+
+  static float distance(sf::Vector2f a, sf::Vector2f b);
+  sf::Vector2f NearestResource(ResourceType type, sf::Vector2f position);
+
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
 };

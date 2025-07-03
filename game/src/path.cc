@@ -15,7 +15,6 @@ sf::Vector2f core::motion::Path::GetNextPoint() {
   if (!IsDone()) {
     ++idxPoint_;
   }
-  std::cout << "next point : " << idxPoint_ << std::endl;
   return path_points_[idxPoint_];
 }
 

@@ -9,6 +9,8 @@
 
 #include "UI/clickable.h"
 #include "_assets/asset_manager.h"
+#include "resources/resource.h"
+#include "resources/resource_manager.h"
 
 constexpr int kWidth = 2000;
 constexpr int kHeight = 2000;
@@ -24,14 +26,14 @@ class TileMap : public game::ui::Clickable {
     WATER
 
 };
-  enum class resourceType {
-    EMPTY,
-    TREE,
-    ROCK
-  };
+  // enum resourceType {
+  //   EMPTY,
+  //   TREE,
+  //   ROCK
+  // };
 
   std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_;
-  std::array<resourceType, kWidth/kPixelStep * kHeight/kPixelStep> resources_;
+  // std::array<Resource, kWidth/kPixelStep * kHeight/kPixelStep> resources_ = {};
 
   AssetManager<sf::Texture> textures;
 
@@ -43,7 +45,7 @@ class TileMap : public game::ui::Clickable {
 
 public:
   explicit TileMap();
-  void Setup(int seed, std::vector<sf::Vector2f>& resources);
+  void Setup(int seed, ResourceManager &resources);
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
   static sf::Vector2f TilePos(sf::Vector2i);

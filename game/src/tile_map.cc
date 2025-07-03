@@ -1,7 +1,9 @@
-﻿#include <SFML/Graphics.hpp>
-#include "../include/tile_map.h"
-#include "maths/perlin.h"
+﻿#include "../include/tile_map.h"
+
+#include <SFML/Graphics.hpp>
 #include <vector>
+
+#include "maths/perlin.h"
 
 void TileMap::Draw(sf::RenderWindow &window)
 {
@@ -33,25 +35,25 @@ void TileMap::Draw(sf::RenderWindow &window)
     tileIndex++;
   }
 
-  sf::Sprite resourceSprite(textures.GetTexture("empty"));
+ //sf::Sprite resourceSprite(textures.GetTexture("empty"));
 
-  for (auto element : resources_) {
-    if (element != resourceType::EMPTY) {
-      switch (element) {
-        case resourceType::ROCK:
-          resourceSprite.setTexture(textures.GetTexture("rock"));
-          break;
-        case resourceType::TREE:
-          resourceSprite.setTexture(textures.GetTexture("tree"));
-          break;
-        default:
-           break;
-      }
-      resourceSprite.setPosition(ScreenPosition(resourceTileIndex));
-      window.draw(resourceSprite);
-    }
-    resourceTileIndex++;
-  }
+  // for (auto element : resources_) {
+  //   if (element != resourceType::EMPTY) {
+  //     switch (element) {
+  //       case resourceType::ROCK:
+  //         resourceSprite.setTexture(textures.GetTexture("rock"));
+  //         break;
+  //       case resourceType::TREE:
+  //         resourceSprite.setTexture(textures.GetTexture("tree"));
+  //         break;
+  //       default:
+  //          break;
+  //     }
+  //     resourceSprite.setPosition(ScreenPosition(resourceTileIndex));
+  //     window.draw(resourceSprite);
+  //   }
+  //   resourceTileIndex++;
+  // }
 
 }
 TileMap::Tile TileMap::GetTileType(float value) {
@@ -82,7 +84,7 @@ sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
 TileMap::TileMap() : textures("../assets/textures/") {}
 
 
-void TileMap::Setup(int seed, std::vector<sf::Vector2f>& resources) {
+void TileMap::Setup(int seed, ResourceManager &resources) {
   seed_ = seed;
   textures.Load_All();
   Perlin perlin(seed_);
@@ -109,17 +111,19 @@ void TileMap::Setup(int seed, std::vector<sf::Vector2f>& resources) {
 
 
       if (value > 0.5f && value < 0.75f) {
-        resources_[index] = resourceType::ROCK;
-        collectibles_rocks_.push_back(pos);
-        //resources.push_back(pos);
+        //resources_[index].getType() = resourceType::ROCK;
+        //collectibles_rocks_.push_back(pos);
+        resources.AddRock(pos);
       }
       else if (value > 0.85f) {
-        resources_[index] = resourceType::TREE;
-        collectibles_trees_.push_back(pos);
-        resources.push_back(pos);
+       //resources_[index] = resourceType::TREE;
+        //collectibles_trees_.push_back(pos);
+        resources.AddTree(pos);
+
+
       }
       else {
-        resources_[index] = resourceType::EMPTY;
+        //resources_[index] = resourceType::EMPTY;
       }
 
       if (tiles_[index] != Tile::WATER)

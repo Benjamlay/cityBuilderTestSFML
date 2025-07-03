@@ -12,7 +12,7 @@ namespace game::ai {
 
     public:
 
-    void Add(sf::Vector2f startPosition, TileMap *tilemap, std::vector<sf::Vector2f> &collectables);
+    void Add(sf::Vector2f startPosition, TileMap *tilemap, ResourceManager resource_manager, ResourceType type);
     void Update(float dt);
     void Draw(sf::RenderWindow &window);
     void GetHitBox();

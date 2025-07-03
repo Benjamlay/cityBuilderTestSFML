@@ -19,6 +19,8 @@ class Npc {
   sf::FloatRect hit_box_;
   motor motor_;
   Path path_;
+  ResourceManager resource_manager_;
+  ResourceType type_;
 
   TileMap* tileMap_;
 
@@ -29,7 +31,7 @@ class Npc {
 public:
 
   explicit Npc();
-  void Setup(sf::Vector2f startPosition, TileMap* tileMap, std::vector<sf::Vector2f>& collectables);
+  void Setup(sf::Vector2f startPosition, TileMap* tileMap,  ResourceManager& resource_manager, ResourceType type);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
   motor getMotor() const;
@@ -44,8 +46,7 @@ public:
   Status ChopingTree();
   //Status Sleep();
 
-  sf::Vector2f NearestResource(std::vector<sf::Vector2f>& collectibles);
-  void SetupBehaviourTree(std::vector<sf::Vector2f>& collectables);
+  void SetupBehaviourTree();
 
   int hunger_;
   int choping_timer_;
@@ -53,7 +54,7 @@ public:
   bool is_choping = false;
   sf::Vector2f destination_;
   sf::Vector2f start_position_;
-  std::vector<sf::Vector2f> ressources_;
+  //std::vector<sf::Vector2f> ressources_;
 
   //motion
 
