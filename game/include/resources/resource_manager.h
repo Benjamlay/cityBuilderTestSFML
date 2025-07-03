@@ -14,6 +14,8 @@ class ResourceManager {
   AssetManager<sf::Texture> textures;
   //std::vector<sf::Vector2f> resources_;
   std::vector<Resource> resources_;
+  int woodStock = 0;
+  int rockStock = 0;
 
 public:
   ResourceManager();
@@ -25,7 +27,8 @@ public:
 
   static float distance(sf::Vector2f a, sf::Vector2f b);
   sf::Vector2f NearestResource(ResourceType type, sf::Vector2f position);
-
+  [[nodiscard]] int GetWoodStock() const {return woodStock;}
+  [[nodiscard]] int GetRockStock() const {return rockStock;}
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
 };

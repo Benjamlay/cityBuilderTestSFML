@@ -17,11 +17,15 @@ namespace
   sf::Vector2i lastMousePos;
   auto tilemap_ptr_ = std::make_unique<TileMap>();
 
+  sf::Font UIfont;
+  sf::Text woodText = sf::Text(UIfont, "Wood: 0");
+  sf::Text rockText = sf::Text(UIfont, "Rock: 0");
+
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
   game::ui::Button button2({100, 170});
-  sf::RectangleShape woodCounter;
+
   auto resource_manager = std::make_unique<ResourceManager>();
 
 }  // namespace
@@ -32,10 +36,7 @@ static void Setup()
   window_.create(sf::VideoMode({1000, 1000}), "City Builder");
   int mapSeed = 4345;
 
-  woodCounter.setSize({100, 100});
-  woodCounter.setFillColor(sf::Color::Green);
-  woodCounter.setPosition({100, 100});
-  woodCounter.setOrigin({50, 50});
+  UIfont.openFromFile("C:/Windows/Fonts/arial.ttf");
   tilemap_ptr_->Setup(mapSeed, resource_manager.get());
 
   npc_manager_.Add({1024, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
@@ -71,7 +72,7 @@ void game::run()
     window_.clear();
 
     npc_manager_.Update(dt);
-
+    resource_manager->Update(dt);
     //update graphic
 
     window_.setView(view);
@@ -81,9 +82,21 @@ void game::run()
 
     //update UI
     window_.setView(UIview);
-    //button.Draw(window_);
-    button2.Draw(window_);
+    //button2.Draw(window_);
+    woodText.setFont(UIfont);
+    woodText.setString("Wood: " + std::to_string(resource_manager->GetWoodStock()));
+    woodText.setCharacterSize(44);
+    woodText.setFillColor(sf::Color::Black);
+    woodText.setPosition({0, 0});
 
+    rockText.setFont(UIfont);
+    rockText.setString("Rock: " + std::to_string(resource_manager->GetRockStock()));
+    rockText.setCharacterSize(44);
+    rockText.setFillColor(sf::Color::Black);
+    rockText.setPosition({0, 50});
+
+    window_.draw(woodText);
+    window_.draw(rockText);
     //display everything
     window_.display();
   }

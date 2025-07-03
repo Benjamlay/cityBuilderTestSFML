@@ -48,22 +48,6 @@ void ResourceManager::Draw(sf::RenderWindow& window) {
 
 sf::Vector2f ResourceManager::NearestResource(ResourceType type, sf::Vector2f position)
 {
-  // auto t = std::views::filter(resources_, [type](Resource& resource) {return resource.getType() == type;});
-  //
-  // float MinDistance = std::numeric_limits<float>::max();
-  // Resource nearest_resource;
-  // for (const auto& resource : t) {
-  //   float dx = resource.GetPosition().x - position.x;
-  //   float dy = resource.GetPosition().y - position.y;
-  //   float distance = std::sqrt(dx * dx + dy * dy);
-  //
-  //   if (distance < MinDistance) {
-  //     MinDistance = distance;
-  //     nearest_resource = resource;
-  //   }
-  // }
-  // return nearest_resource.GetPosition();
-
   float minDistance = std::numeric_limits<float>::max();
   auto nearest_resource_it = resources_.end();
 
@@ -82,10 +66,16 @@ sf::Vector2f ResourceManager::NearestResource(ResourceType type, sf::Vector2f po
   }
   if (nearest_resource_it != resources_.end()) {
     sf::Vector2f pos = nearest_resource_it->GetPosition();
+    if (type == TREE) {
+      woodStock++;
+    }
+    if (type == ROCK) {
+      rockStock++;
+    }
     resources_.erase(nearest_resource_it);
     return pos;
   } else {
-    throw std::runtime_error("No resource found");
+    return sf::Vector2f(0, 0);
   }
 
 }
