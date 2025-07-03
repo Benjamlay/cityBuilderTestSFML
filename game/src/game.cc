@@ -47,9 +47,16 @@ static void Setup()
 std::cout << "wood count: " << resource_manager->GetResources().size() << std::endl;
   tilemap_ptr_->OnReleasedRight = [] () {
 
-    std::cout << "adding npc" << std::endl;
     sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
-    npc_manager_.Add(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),tilemap_ptr_.get(), resource_manager.get(), TREE);
+
+    if (tilemap_ptr_->IsWalkable(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)))) {
+      npc_manager_.Add(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
+      tilemap_ptr_.get(), resource_manager.get(), TREE);
+    }
+    else {
+      std::cout << "not walkable" << std::endl;
+    }
+
   };
 
   dt = 0.f;

@@ -80,6 +80,12 @@ sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
   return {static_cast<float>(ceil(pos.x / kPixelStep) * kPixelStep),
           static_cast<float>(ceil(pos.y / kPixelStep) * kPixelStep)};
 }
+bool TileMap::IsWalkable(sf::Vector2f pos) {
+
+  const auto& walk = GetWalkables();
+  return std::find(walk.begin(), walk.end(), pos) != walk.end();
+}
+
 
 TileMap::TileMap() : textures("../assets/textures/") {}
 

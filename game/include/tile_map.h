@@ -49,6 +49,7 @@ public:
   void Draw(sf::RenderWindow &window);
   Tile GetTileType(float value);
   static sf::Vector2f TilePos(sf::Vector2i);
+  bool IsWalkable(sf::Vector2f pos);
 
   std::vector<sf::Vector2f> &GetWalkables();
   std::vector<sf::Vector2f> &GetCollectablesTrees();
