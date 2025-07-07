@@ -28,9 +28,7 @@ void ResourceManager::Update(float dt) {
 
 void ResourceManager::Draw(sf::RenderWindow& window) {
   int resourceTileIndex = 0;
-  //int resourceVisitedIndex = 0;
   sf::Sprite resourceSprite(textures.GetTexture("empty"));
-  //sf::Sprite resourceVisited(textures.GetTexture("empty"));
 
   for (auto resource : resources_) {
     if (resource.getType() != EMPTY) {
@@ -49,53 +47,41 @@ void ResourceManager::Draw(sf::RenderWindow& window) {
     }
     resourceTileIndex++;
   }
-
-  // for (auto resource : resources_visited_) {
-  //   if (resource.getType() != EMPTY) {
-  //     switch (resource.getType()) {
-  //       case ROCK:
-  //         resourceVisited.setTexture(textures.GetTexture("rock"));
-  //         break;
-  //       case TREE:
-  //         resourceVisited.setTexture(textures.GetTexture("tree"));
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //     resourceVisited.setPosition(resource.GetPosition());
-  //     window.draw(resourceVisited);
-  //   }
-  //   resourceVisitedIndex++;
-  // }
 }
 
-sf::Vector2f ResourceManager::NearestResource(ResourceType type, sf::Vector2f position)
+std::optional<sf::Vector2f> ResourceManager::NearestResource(ResourceType type, sf::Vector2f position)
 {
-  float minDistance = std::numeric_limits<float>::max();
-  auto nearest_resource_it = resources_.end();
 
-  for (auto it = resources_.begin(); it != resources_.end(); ++it) {
-    if (it->getType() != type) {
-      continue;
-    }
-    float dx = it->GetPosition().x - position.x;
-    float dy = it->GetPosition().y - position.y;
-    float distance = std::sqrt(dx * dx + dy * dy);
+  float bestDist = std::numeric_limits<float>::max();
+  const Resource* bestRes = nullptr;
 
-    if (distance < minDistance) {
-      minDistance = distance;
-      nearest_resource_it = it;
+  for (auto const& r : resources_) {
+    if (r.getType() != type) continue;
+    // déjà visité ?
+    bool seen = std::any_of(resources_visited_.begin(), resources_visited_.end(),
+      [&](auto const& v){
+        return v.getType()==type && v.GetPosition()==r.GetPosition();
+      });
+    if (seen) continue;
+
+    float d = std::hypot(r.GetPosition().x - position.x,
+                         r.GetPosition().y - position.y);
+    if (d < bestDist) {
+      bestDist = d;
+      bestRes = &r;
     }
   }
-  if (nearest_resource_it != resources_.end()) {
-    sf::Vector2f pos = nearest_resource_it->GetPosition();
-    resources_visited_.emplace_back(*nearest_resource_it);
-    //resources_.erase(nearest_resource_it);
-    return pos;
-  } else {
-    return sf::Vector2f(0, 0);
-  }
+  if (bestRes) return bestRes->GetPosition();
+  return std::nullopt;
 
+}
+
+void ResourceManager::ReserveResource(ResourceType type, sf::Vector2f pos) {
+  auto it = std::find_if(resources_.begin(), resources_.end(),
+    [&](auto const& r){ return r.getType()==type && r.GetPosition()==pos; });
+  if (it != resources_.end()) {
+    resources_visited_.push_back(*it);
+  }
 }
 
 

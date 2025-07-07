@@ -28,17 +28,24 @@ Status Npc::Eat() {
 }
 
 Status Npc::findResource() {
-  destination_ = resource_manager_->NearestResource(type_, motor_.GetPosition());
 
+  auto opt = resource_manager_->NearestResource(type_, motor_.GetPosition());
+  if (!opt) return Status::kFailure;
 
-  Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_,
+  sf::Vector2f candidate = *opt;
+  Path path = motion::Astar::GetPath(motor_.GetPosition(),
+                                     candidate,
                                      tileMap_->GetWalkables());
-  if (path.IsValid()) {
-    SetPath(path);
-    return Status::kSuccess;
-  } else {
+  if (!path.IsValid()) {
     return Status::kFailure;
   }
+
+  resource_manager_->ReserveResource(type_, candidate);
+
+  destination_ = candidate;
+  SetPath(path);
+  return Status::kSuccess;
+
 }
 
 Status Npc::findHome() {
@@ -148,6 +155,7 @@ void Npc::Update(float dt)
   if (is_choping) {
     choping_timer_--;
   }
+  //TODO : add deltatime to eating and choping
 
   if (path_.IsValid()){
     motor_.Update(dt);

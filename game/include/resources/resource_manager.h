@@ -6,6 +6,8 @@
 #include <vector>
 #include "_assets/asset_manager.h"
 #include "resource.h"
+#include <optional>
+
 
 
 
@@ -32,7 +34,10 @@ public:
   void RemoveFlower(int amount);
 
   static float distance(sf::Vector2f a, sf::Vector2f b);
-  sf::Vector2f NearestResource(ResourceType type, sf::Vector2f position);
+  std::optional<sf::Vector2f> NearestResource(ResourceType type, sf::Vector2f position);
+  void ReserveResource(ResourceType type, sf::Vector2f pos);
+
+
   [[nodiscard]] int GetWoodStock() const {return woodStock +1;}
   [[nodiscard]] int GetRockStock() const {return rockStock +1;}
   void Update(float dt);
