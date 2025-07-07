@@ -24,6 +24,14 @@ void ResourceManager::RemoveWood(int amount) {
 
 void ResourceManager::Update(float dt) {
 
+  respawn_timer_ += dt;
+  if (respawn_timer_ >= kRespawnInterval && !resources_visited_.empty()) {
+    resources_.push_back(resources_visited_.front());
+    resources_visited_.erase(resources_visited_.begin());
+    std::cout << "respawn" << std::endl;
+    respawn_timer_ = 0.f;
+  }
+
 }
 
 void ResourceManager::Draw(sf::RenderWindow& window) {

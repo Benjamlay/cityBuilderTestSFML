@@ -54,7 +54,6 @@ Status Npc::findHome() {
 
   if (path.IsValid()) {
     SetPath(path);
-    // std::cout << "path found !" << std::endl;
     return Status::kSuccess;
   } else {
     return Status::kFailure;
