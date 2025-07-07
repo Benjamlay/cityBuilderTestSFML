@@ -68,9 +68,9 @@ Status Npc::ChopingTree() {
     is_choping = false;
     choping_timer_ = 0;
 
-if (auto it = std::find_if(resource_manager_->GetResourcesVisited().begin(), resource_manager_->GetResourcesVisited().end(),
-    [this](const Resource& r){ return r.GetPosition() == destination_; }); it != resource_manager_->GetResourcesVisited().end())
-  resource_manager_->GetResourcesVisited().erase(it);
+if (auto it = std::find_if(resource_manager_->GetResources().begin(), resource_manager_->GetResources().end(),
+    [this](const Resource& r){ return r.GetPosition() == destination_; }); it != resource_manager_->GetResources().end())
+  resource_manager_->GetResources().erase(it);
 
     if (this->getType() == TREE) {
       resource_manager_->woodStock++;

@@ -44,7 +44,6 @@ static void Setup()
   npc_manager_.Add({256, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
   npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager.get(), ROCK);
 
-std::cout << "wood count: " << resource_manager->GetResources().size() << std::endl;
   tilemap_ptr_->OnReleasedRight = [] () {
 
     sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
@@ -52,9 +51,6 @@ std::cout << "wood count: " << resource_manager->GetResources().size() << std::e
     if (tilemap_ptr_->IsWalkable(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)))) {
       npc_manager_.Add(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
       tilemap_ptr_.get(), resource_manager.get(), TREE);
-    }
-    else {
-      std::cout << "not walkable" << std::endl;
     }
 
   };
