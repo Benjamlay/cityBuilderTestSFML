@@ -18,6 +18,9 @@ void ResourceManager::AddRock(sf::Vector2f pos) {
 void ResourceManager::AddFlower(sf::Vector2f pos) {
   resources_.emplace_back(pos, FLOWER);
 }
+void ResourceManager::RemoveWood(int amount) {
+  woodStock -= amount;
+}
 
 void ResourceManager::Update(float dt) {
 
@@ -87,7 +90,6 @@ sf::Vector2f ResourceManager::NearestResource(ResourceType type, sf::Vector2f po
   if (nearest_resource_it != resources_.end()) {
     sf::Vector2f pos = nearest_resource_it->GetPosition();
     resources_visited_.emplace_back(*nearest_resource_it);
-    //TODO : resources should not be deleted here
     //resources_.erase(nearest_resource_it);
     return pos;
   } else {

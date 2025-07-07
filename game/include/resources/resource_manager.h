@@ -27,11 +27,14 @@ public:
   void AddTree(sf::Vector2f pos);
   void AddRock(sf::Vector2f pos);
   void AddFlower(sf::Vector2f pos);
+  void RemoveWood(int amount);
+  void RemoveRock(int amount);
+  void RemoveFlower(int amount);
 
   static float distance(sf::Vector2f a, sf::Vector2f b);
   sf::Vector2f NearestResource(ResourceType type, sf::Vector2f position);
-  [[nodiscard]] int GetWoodStock() const {return woodStock;}
-  [[nodiscard]] int GetRockStock() const {return rockStock;}
+  [[nodiscard]] int GetWoodStock() const {return woodStock +1;}
+  [[nodiscard]] int GetRockStock() const {return rockStock +1;}
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
 };

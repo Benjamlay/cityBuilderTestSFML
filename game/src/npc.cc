@@ -30,9 +30,7 @@ Status Npc::Eat() {
 Status Npc::findResource() {
   destination_ = resource_manager_->NearestResource(type_, motor_.GetPosition());
 
-  if (destination_ == sf::Vector2f(0,0)) {
-    return Status::kFailure;
-  }
+
   Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_,
                                      tileMap_->GetWalkables());
   if (path.IsValid()) {

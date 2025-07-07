@@ -48,11 +48,14 @@ static void Setup()
 
     sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
 
-    if (tilemap_ptr_->IsWalkable(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)))) {
-      npc_manager_.Add(TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
-      tilemap_ptr_.get(), resource_manager.get(), TREE);
+    if (resource_manager->GetWoodStock() > 5) {
+      if (tilemap_ptr_->IsWalkable(
+              TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)))) {
+        npc_manager_.Add(
+            TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
+            tilemap_ptr_.get(), resource_manager.get(), TREE);
+        resource_manager->RemoveWood(5);}
     }
-
   };
 
   dt = 0.f;
