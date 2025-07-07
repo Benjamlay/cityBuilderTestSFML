@@ -37,6 +37,7 @@ public:
   void Draw(sf::RenderWindow &window);
   motor getMotor() const;
   sf::FloatRect GetHitBox();
+  ResourceType getType() const { return type_;}
 
   Status Move();
   Status IsHungry();

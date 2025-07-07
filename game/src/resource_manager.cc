@@ -25,7 +25,9 @@ void ResourceManager::Update(float dt) {
 
 void ResourceManager::Draw(sf::RenderWindow& window) {
   int resourceTileIndex = 0;
+  int resourceVisitedIndex = 0;
   sf::Sprite resourceSprite(textures.GetTexture("empty"));
+  sf::Sprite resourceVisited(textures.GetTexture("empty"));
 
   for (auto resource : resources_) {
     if (resource.getType() != EMPTY) {
@@ -43,6 +45,24 @@ void ResourceManager::Draw(sf::RenderWindow& window) {
       window.draw(resourceSprite);
     }
     resourceTileIndex++;
+  }
+
+  for (auto resource : resources_visited_) {
+    if (resource.getType() != EMPTY) {
+      switch (resource.getType()) {
+        case ROCK:
+          resourceVisited.setTexture(textures.GetTexture("rock"));
+          break;
+        case TREE:
+          resourceVisited.setTexture(textures.GetTexture("tree"));
+          break;
+        default:
+          break;
+      }
+      resourceVisited.setPosition(resource.GetPosition());
+      window.draw(resourceVisited);
+    }
+    resourceVisitedIndex++;
   }
 }
 
@@ -66,12 +86,7 @@ sf::Vector2f ResourceManager::NearestResource(ResourceType type, sf::Vector2f po
   }
   if (nearest_resource_it != resources_.end()) {
     sf::Vector2f pos = nearest_resource_it->GetPosition();
-    if (type == TREE) {
-      woodStock++;
-    }
-    if (type == ROCK) {
-      rockStock++;
-    }
+    resources_visited_.emplace_back(*nearest_resource_it);
     resources_.erase(nearest_resource_it);
     return pos;
   } else {

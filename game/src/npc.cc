@@ -57,16 +57,28 @@ Status Npc::findHome() {
 }
 
 Status Npc::StartChoping() {
-  // std::cout << "Chopping tree" << std::endl;
   is_choping = true;
   choping_timer_ = 100;
   return Status::kSuccess;
 }
+
 Status Npc::ChopingTree() {
 
   if (choping_timer_ <= 0){
     is_choping = false;
     choping_timer_ = 0;
+
+if (auto it = std::find_if(resource_manager_->GetResourcesVisited().begin(), resource_manager_->GetResourcesVisited().end(),
+    [this](const Resource& r){ return r.GetPosition() == destination_; }); it != resource_manager_->GetResourcesVisited().end())
+  resource_manager_->GetResourcesVisited().erase(it);
+
+    if (this->getType() == TREE) {
+      resource_manager_->woodStock++;
+    }
+    if (this->getType() == ROCK) {
+      resource_manager_->rockStock++;
+    }
+
     return Status::kSuccess;
   }
   return Status::kRunning;

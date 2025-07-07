@@ -12,14 +12,17 @@
 class ResourceManager {
 
   AssetManager<sf::Texture> textures;
-  //std::vector<sf::Vector2f> resources_;
   std::vector<Resource> resources_;
-  int woodStock = 0;
-  int rockStock = 0;
+  std::vector<Resource> resources_visited_;
+
 
 public:
   ResourceManager();
   std::vector<Resource>& GetResources(){return resources_;}
+  std::vector<Resource>& GetResourcesVisited(){return resources_visited_;}
+
+  int woodStock = 0;
+  int rockStock = 0;
 
   void AddTree(sf::Vector2f pos);
   void AddRock(sf::Vector2f pos);
