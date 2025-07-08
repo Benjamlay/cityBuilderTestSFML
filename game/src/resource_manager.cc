@@ -18,9 +18,8 @@ void ResourceManager::AddRock(sf::Vector2f pos) {
 void ResourceManager::AddFlower(sf::Vector2f pos) {
   resources_.emplace_back(pos, FLOWER);
 }
-void ResourceManager::RemoveWood(int amount) {
-  woodStock -= amount;
-}
+void ResourceManager::RemoveWood(int amount) {woodStock -= amount;}
+void ResourceManager::RemoveRock(int amount) {rockStock -= amount;}
 
 void ResourceManager::Update(float dt) {
 
@@ -28,7 +27,6 @@ void ResourceManager::Update(float dt) {
   if (respawn_timer_ >= kRespawnInterval && !resources_visited_.empty()) {
     resources_.push_back(resources_visited_.front());
     resources_visited_.erase(resources_visited_.begin());
-    std::cout << "respawn" << std::endl;
     respawn_timer_ = 0.f;
   }
 

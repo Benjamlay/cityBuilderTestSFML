@@ -25,9 +25,11 @@ class Npc {
 
   TileMap* tileMap_;
 
-  static constexpr float kHungerRate = 1.0f;
+  static constexpr float kHungerRate = 2.5f;
+  static constexpr float kChopingRate = 10.0f;
   static constexpr float kMovingSpeed = 50.0f;
 
+  float dt_;
 
 public:
 
@@ -35,8 +37,6 @@ public:
   void Setup(sf::Vector2f startPosition, TileMap* tileMap,  ResourceManager* resource_manager, ResourceType type);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
-  motor getMotor() const;
-  sf::FloatRect GetHitBox();
   ResourceType getType() const { return type_;}
 
   Status Move();
@@ -50,8 +50,8 @@ public:
 
   void SetupBehaviourTree();
 
-  int hunger_;
-  int choping_timer_;
+  float hunger_;
+  float choping_timer_;
   bool is_eating_ = false;
   bool is_choping = false;
   sf::Vector2f destination_;

@@ -15,8 +15,6 @@ namespace game::ai {
     void Add(sf::Vector2f startPosition, TileMap *tilemap, ResourceManager* resource_manager, ResourceType type);
     void Update(float dt);
     void Draw(sf::RenderWindow &window);
-    void GetHitBox();
-    void CheckCollisions(std::vector</*trees*/sf::FloatRect>& collisions);
 
   };
 }

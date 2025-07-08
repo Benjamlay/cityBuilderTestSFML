@@ -16,7 +16,7 @@ Status Npc::Move() {
 
 Status Npc::Eat() {
   is_eating_ = true;
-  hunger_ -= kHungerRate;
+  hunger_ -= kHungerRate * dt_;
 
   if (hunger_ <= 0){
     is_eating_ = false;
@@ -147,15 +147,13 @@ void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, ResourceManager* r
 void Npc::Update(float dt)
 {
   root_->Tick();
-
+  dt_ = dt;
   if (!is_eating_) {
-    hunger_ += kHungerRate;
+    hunger_ += kHungerRate * dt_;
   }
   if (is_choping) {
-    choping_timer_--;
+    choping_timer_-= kChopingRate * dt_;
   }
-  //TODO : add deltatime to eating and choping
-
   if (path_.IsValid()){
     motor_.Update(dt);
     if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {
@@ -165,6 +163,7 @@ void Npc::Update(float dt)
 }
 
 void Npc::Draw(sf::RenderWindow& window) {
+  //TODO : change sprite depending on type : if(type_ == TREE) GetTexture("treeGuy")
   sf::Sprite GuySprite(textures.GetTexture("guy"));
   sf::Sprite HouseSprite(textures.GetTexture("house"));
   GuySprite.setPosition(motor_.GetPosition());
@@ -172,15 +171,7 @@ void Npc::Draw(sf::RenderWindow& window) {
   window.draw(GuySprite);
   window.draw(HouseSprite);
 }
-motor Npc::getMotor() const { return motor_; }
 
-
-sf::FloatRect Npc::GetHitBox() {
-  sf::Sprite GuySprite(textures.GetTexture("guy"));
-  GuySprite.setPosition(motor_.GetPosition());
-  hit_box_ = GuySprite.getGlobalBounds();
-  return hit_box_;
-}
 
 void Npc::SetPath(const Path& path){
   path_ = path;

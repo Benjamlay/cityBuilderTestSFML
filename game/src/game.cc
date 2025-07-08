@@ -48,14 +48,15 @@ static void Setup()
 
     sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
 
-    if (resource_manager->GetWoodStock() > 0) {
-      //TODO: make a function to check if the player has enough resources to buy a house
+    if (game::enoughMoneyForHouse()) {
       if (tilemap_ptr_->IsWalkable(
               TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)))) {
         npc_manager_.Add(
             TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
             tilemap_ptr_.get(), resource_manager.get(), TREE);
-        resource_manager->RemoveWood(0);}
+
+        resource_manager->RemoveWood(5);
+        resource_manager->RemoveRock(5);}
     }
   };
 
@@ -110,35 +111,38 @@ void game::run()
 }
 
 void game::HandleEvents(std::optional<sf::Event> event) {
+  if (event->is<sf::Event::Closed>()) {
+    window_.close();
+  }
 
-    if (event->is<sf::Event::Closed>()) {
-      window_.close();
+  if (const auto mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
+    if (mouseClick->button == sf::Mouse::Button::Left) {
+      dragging_ = true;
+      lastMousePos = sf::Mouse::getPosition(window_);
     }
-
-    if (const auto mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
-      if (mouseClick->button == sf::Mouse::Button::Left) {
-        dragging_ = true;
-        lastMousePos = sf::Mouse::getPosition(window_);
-      }
+  }
+  if (const auto mouseClick = event->getIf<sf::Event::MouseButtonReleased>()) {
+    if (mouseClick->button == sf::Mouse::Button::Left) {
+      dragging_ = false;
     }
-    if (const auto mouseClick = event->getIf<sf::Event::MouseButtonReleased>()) {
-      if (mouseClick->button == sf::Mouse::Button::Left) {
-        dragging_ = false;
-      }
+  }
+  if (event->is<sf::Event::MouseMoved>() && dragging_) {
+    sf::Vector2i currentMousePos = sf::Mouse::getPosition(window_);
+    sf::Vector2f delta = window_.mapPixelToCoords(lastMousePos) -
+                         window_.mapPixelToCoords(currentMousePos);
+    view.move(delta);
+    lastMousePos = currentMousePos;
+  }
+  if (const auto wheelScrolled =
+          event->getIf<sf::Event::MouseWheelScrolled>()) {
+    if (wheelScrolled->delta > 0) {
+      view.zoom(0.9f);
+    } else {
+      view.zoom(1.1f);
     }
-    if (event->is<sf::Event::MouseMoved>() && dragging_) {
-      sf::Vector2i currentMousePos = sf::Mouse::getPosition(window_);
-      sf::Vector2f delta = window_.mapPixelToCoords(lastMousePos) - window_.mapPixelToCoords(currentMousePos);
-      view.move(delta);
-      lastMousePos = currentMousePos;
-    }
-    if (const auto wheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()) {
-      if (wheelScrolled->delta > 0) {
-        view.zoom(0.9f);
-      } else {
-        view.zoom(1.1f);
-      }
-    }
-
+  }
+}
+bool game::enoughMoneyForHouse() {
+  return resource_manager->GetWoodStock() > 5 && resource_manager->GetRockStock() > 5;
 }
 

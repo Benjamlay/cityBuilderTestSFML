@@ -13,6 +13,8 @@ namespace game
 {
     void run();
     void HandleEvents(std::optional<sf::Event> evt);
+    bool enoughMoneyForHouse();
+
 
 };
 

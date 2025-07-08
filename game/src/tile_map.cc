@@ -8,7 +8,6 @@
 void TileMap::Draw(sf::RenderWindow &window)
 {
   int tileIndex = 0;
-  int resourceTileIndex = 0;
 
   sf::Sprite sprite(textures.GetTexture("empty"));
 
@@ -34,27 +33,6 @@ void TileMap::Draw(sf::RenderWindow &window)
     }
     tileIndex++;
   }
-
- //sf::Sprite resourceSprite(textures.GetTexture("empty"));
-
-  // for (auto element : resources_) {
-  //   if (element != resourceType::EMPTY) {
-  //     switch (element) {
-  //       case resourceType::ROCK:
-  //         resourceSprite.setTexture(textures.GetTexture("rock"));
-  //         break;
-  //       case resourceType::TREE:
-  //         resourceSprite.setTexture(textures.GetTexture("tree"));
-  //         break;
-  //       default:
-  //          break;
-  //     }
-  //     resourceSprite.setPosition(ScreenPosition(resourceTileIndex));
-  //     window.draw(resourceSprite);
-  //   }
-  //   resourceTileIndex++;
-  // }
-
 }
 TileMap::Tile TileMap::GetTileType(float value) {
   if (value < 0.3f)
@@ -115,23 +93,12 @@ void TileMap::Setup(int seed, ResourceManager *resources) {
       else
         {tiles_[index] = Tile::GRASS2;}
 
-
       if (value > 0.5f && value < 0.75f) {
-        //resources_[index].getType() = resourceType::ROCK;
-        //collectibles_rocks_.push_back(pos);
         resources->AddRock(pos);
       }
       else if (value > 0.85f) {
-       //resources_[index] = resourceType::TREE;
-        //collectibles_trees_.push_back(pos);
         resources->AddTree(pos);
-
-
       }
-      else {
-        //resources_[index] = resourceType::EMPTY;
-      }
-
       if (tiles_[index] != Tile::WATER)
       {
         walkables_.push_back(pos);
