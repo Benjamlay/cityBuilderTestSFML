@@ -129,7 +129,8 @@ void Npc::SetupBehaviourTree(){
 
 void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, ResourceManager* resource_manager, ResourceType type)
 {
-  textures.Load("guy", textures.folder_ + "guy.png");
+  textures.Load("treeGuy", textures.folder_ + "guy.png");
+  textures.Load("rockGuy" , textures.folder_ + "StoneWorker.png");
   textures.Load("house", textures.folder_ + "house.png");
   start_position_ = startPosition;
   hunger_ = 0;
@@ -163,8 +164,23 @@ void Npc::Update(float dt)
 }
 
 void Npc::Draw(sf::RenderWindow& window) {
-  //TODO : change sprite depending on type : if(type_ == TREE) GetTexture("treeGuy")
-  sf::Sprite GuySprite(textures.GetTexture("guy"));
+
+  sf::Sprite GuySprite(textures.GetTexture("rockGuy"));
+
+  switch (type_) {
+    case ROCK:
+      GuySprite.setTexture(textures.GetTexture("rockGuy"));
+      break;
+    case TREE:
+      GuySprite.setTexture(textures.GetTexture("treeGuy"));
+      break;
+      case FLOWER:
+      GuySprite.setTexture(textures.GetTexture("treeGuy"));
+      break;
+      default:
+      break;
+  }
+
   sf::Sprite HouseSprite(textures.GetTexture("house"));
   GuySprite.setPosition(motor_.GetPosition());
   HouseSprite.setPosition(start_position_);
