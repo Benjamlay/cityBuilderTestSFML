@@ -1,6 +1,6 @@
-﻿#include "../include/AI/npc_manager.h"
+﻿#include "../../include/AI/npc_manager.h"
 
-#include "../include/AI/npc_factory.h"
+#include "../../include/AI/npc_factory.h"
 
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
@@ -29,6 +29,11 @@ void NpcManager::Draw(sf::RenderWindow& window) {
 #ifdef TRACY_ENABLE
   ZoneScoped;
 #endif // TRACY_ENABLE
+
+  npcs_.erase(std::remove_if(npcs_.begin(), npcs_.end(),[](const std::unique_ptr<Npc>& npc){
+        return npc->is_dead;}),npcs_.end()
+  );
+
   for (auto& npc : npcs_) {
     npc->Draw(window);
   }

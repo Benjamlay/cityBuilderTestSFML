@@ -55,6 +55,7 @@ public:
   float choping_timer_;
   bool is_eating_ = false;
   bool is_choping = false;
+  bool is_dead = false;
   sf::Vector2f destination_;
   sf::Vector2f start_position_;
   //std::vector<sf::Vector2f> ressources_;

@@ -1,4 +1,4 @@
-﻿#include "../include/AI/npc.h"
+﻿#include "../../include/AI/npc.h"
 
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
@@ -20,15 +20,20 @@ Status Npc::Move() {
 
 Status Npc::Eat() {
   is_eating_ = true;
-  hunger_ -= kHungerRate * dt_;
 
   if (hunger_ <= 0){
     is_eating_ = false;
+    resource_manager_->flowerStock -= 5;
     return Status::kSuccess;
   }
 
-  //std::cout << "I'm eating" << std::endl;
-  return Status::kRunning;
+  if (resource_manager_->flowerStock >= 5) {
+    hunger_ -= kHungerRate * dt_ * 4;
+    return Status::kRunning;
+  }
+
+  is_eating_ = false;
+  return Status::kFailure;
 }
 
 Status Npc::findResource() {
@@ -85,6 +90,9 @@ if (auto it = std::find_if(resource_manager_->GetResources().begin(), resource_m
     if (this->getType() == ROCK) {
       resource_manager_->rockStock++;
     }
+    if (this->getType() == FLOWER) {
+      resource_manager_->flowerStock++;
+    }
 
     return Status::kSuccess;
   }
@@ -101,8 +109,6 @@ Status Npc::IsHungry() {
 }
 
 void Npc::SetupBehaviourTree(){
-
-  //ressources_ = collectables;
 
   auto feedSequence = std::make_unique<Sequence>();
 
@@ -168,6 +174,9 @@ void Npc::Update(float dt)
     if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {
       motor_.SetDestination(path_.GetNextPoint());
     }
+  }
+  if (hunger_ >= 180) {
+    is_dead = true;
   }
 }
 

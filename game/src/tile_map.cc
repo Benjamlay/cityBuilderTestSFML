@@ -102,11 +102,14 @@ void TileMap::Setup(int seed, ResourceManager *resources) {
       else
         {tiles_[index] = Tile::GRASS2;}
 
-      if (value > 0.5f && value < 0.75f) {
-        resources->AddRock(pos);
+      if (value > 0.5f && value < 0.65f) {
+        resources->AddTree(pos);
+      }
+      else if (value > 0.10f && value < 0.15f) {
+        resources->AddFlower(pos);
       }
       else if (value > 0.85f) {
-        resources->AddTree(pos);
+        resources->AddRock(pos);
       }
       if (tiles_[index] != Tile::WATER)
       {

@@ -27,6 +27,7 @@ public:
 
   int woodStock = 0;
   int rockStock = 0;
+  int flowerStock = 0;
 
   void AddTree(sf::Vector2f pos);
   void AddRock(sf::Vector2f pos);
@@ -34,14 +35,16 @@ public:
   void RemoveWood(int amount);
   void RemoveRock(int amount);
   void RemoveFlower(int amount);
+  void SetFlower(int amount);
 
   static float distance(sf::Vector2f a, sf::Vector2f b);
   std::optional<sf::Vector2f> NearestResource(ResourceType type, sf::Vector2f position);
   void ReserveResource(ResourceType type, sf::Vector2f pos);
 
 
-  [[nodiscard]] int GetWoodStock() const {return woodStock +1;}
-  [[nodiscard]] int GetRockStock() const {return rockStock +1;}
+  [[nodiscard]] int GetWoodStock() const {return woodStock;}
+  [[nodiscard]] int GetRockStock() const {return rockStock;}
+  [[nodiscard]] int GetFlowerStock() const {return flowerStock;}
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
 };

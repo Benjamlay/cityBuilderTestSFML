@@ -24,27 +24,21 @@ namespace
   sf::Font UIfont;
   sf::Text woodText = sf::Text(UIfont, "Wood: 0");
   sf::Text rockText = sf::Text(UIfont, "Rock: 0");
+  sf::Text flowerText = sf::Text(UIfont, "Flower: 0");
 
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
-  game::ui::Button button2({100, 170});
+  game::ui::Button button2({50, 800});
+  game::ui::Button button1({130, 800});
 
   auto resource_manager = std::make_unique<ResourceManager>();
 
+  ResourceType npc_type = EMPTY;
 }  // namespace
-
 
 static void Setup()
 {
-
-#ifdef TRACY_ENABLE
-  ZoneScoped;
-#endif // TRACY_ENABLE
-  // if (!std::filesystem::exists(textures.folder_)) {
-  //   throw std::runtime_error("Texture folder does not exist");
-  // }
-
   {
 #ifdef TRACY_ENABLE
     ZoneNamedN(window_creation_event,"Window Creation", true);
@@ -67,7 +61,9 @@ static void Setup()
   npc_manager_.Add({256, 1024},tilemap_ptr_.get(), resource_manager.get(), ROCK);
   npc_manager_.Add({256, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
   npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager.get(), ROCK);
+  npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager.get(), FLOWER);
 
+  resource_manager->SetFlower(0);
   tilemap_ptr_->OnReleasedRight = [] () {
 #ifdef TRACY_ENABLE
     ZoneNamedN(right_click_event,"Right Click", true);
@@ -75,17 +71,21 @@ static void Setup()
 
     sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
 
-    if (game::enoughMoneyForHouse()) {
+    if (game::EnoughMoneyForHouse()) {
       if (tilemap_ptr_->IsWalkable(
               TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)))) {
         npc_manager_.Add(
             TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
-            tilemap_ptr_.get(), resource_manager.get(), TREE);
+            tilemap_ptr_.get(), resource_manager.get(), npc_type);
 
         resource_manager->RemoveWood(0);
         resource_manager->RemoveRock(0);}
+      npc_type = EMPTY;
     }
   };
+
+  button2.OnReleasedLeft = [] () {npc_type = TREE;};
+  button1.OnReleasedLeft = [] () {npc_type = ROCK;};
 
   dt = 0.f;
 }
@@ -108,6 +108,7 @@ void game::run()
         HandleEvents(event);
         //button.HandleEvent(event);
         button2.HandleEvent(event);
+        button1.HandleEvent(event);
         tilemap_ptr_->HandleEvent(event);
       }
     }
@@ -125,7 +126,9 @@ void game::run()
 
     //update UI
     window_.setView(UIview);
-    //button2.Draw(window_);
+    button2.Draw(window_);
+    button1.Draw(window_);
+
     woodText.setFont(UIfont);
     woodText.setString("Wood: " + std::to_string(resource_manager->GetWoodStock()));
     woodText.setCharacterSize(44);
@@ -138,8 +141,16 @@ void game::run()
     rockText.setFillColor(sf::Color::White);
     rockText.setPosition({20, 70});
 
+    flowerText.setFont(UIfont);
+    flowerText.setString("Flower: " + std::to_string(resource_manager->GetFlowerStock()));
+    flowerText.setCharacterSize(44);
+    flowerText.setFillColor(sf::Color::White);
+    flowerText.setPosition({20, 120});
+
+
     window_.draw(woodText);
     window_.draw(rockText);
+    window_.draw(flowerText);
     //display everything
 
     {
@@ -187,7 +198,7 @@ void game::HandleEvents(std::optional<sf::Event> event) {
     }
   }
 }
-bool game::enoughMoneyForHouse() {
+bool game::EnoughMoneyForHouse() {
   return resource_manager->GetWoodStock() > 0 && resource_manager->GetRockStock() > 0;
 }
 

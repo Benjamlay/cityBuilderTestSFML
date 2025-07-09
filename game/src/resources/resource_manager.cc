@@ -12,6 +12,8 @@ ResourceManager::ResourceManager() : textures("../assets/textures/") {
   textures.Load("empty", textures.folder_ + "empty.png");
   textures.Load("tree", textures.folder_ + "tree.png");
   textures.Load("rock", textures.folder_ + "rock.png");
+  textures.Load("flower", textures.folder_ + "flower.png");
+
 }
 void ResourceManager::AddTree(sf::Vector2f pos) {
   resources_.emplace_back(pos, TREE);
@@ -23,7 +25,9 @@ void ResourceManager::AddFlower(sf::Vector2f pos) {
   resources_.emplace_back(pos, FLOWER);
 }
 void ResourceManager::RemoveWood(int amount) {woodStock -= amount;}
-void ResourceManager::RemoveRock(int amount) {rockStock -= amount;}
+void ResourceManager::RemoveRock(int amount) { rockStock -= amount; }
+void ResourceManager::RemoveFlower(int amount) { flowerStock -= amount; }
+void ResourceManager::SetFlower(int amount) {flowerStock = amount;}
 
 void ResourceManager::Update(float dt) {
 
@@ -38,6 +42,9 @@ ZoneScoped;
     respawn_timer_ = 0.f;
   }
 
+  if (flowerStock <= 0) {
+    SetFlower(0);
+  }
 }
 
 void ResourceManager::Draw(sf::RenderWindow& window) {
@@ -56,6 +63,9 @@ void ResourceManager::Draw(sf::RenderWindow& window) {
         case TREE:
           resourceSprite.setTexture(textures.GetTexture("tree"));
           break;
+        case FLOWER:
+          resourceSprite.setTexture(textures.GetTexture("flower"));
+          break;
         default:
           break;
       }
@@ -68,7 +78,6 @@ void ResourceManager::Draw(sf::RenderWindow& window) {
 
 std::optional<sf::Vector2f> ResourceManager::NearestResource(ResourceType type, sf::Vector2f position)
 {
-
   float bestDist = std::numeric_limits<float>::max();
   const Resource* bestRes = nullptr;
 
@@ -90,7 +99,6 @@ std::optional<sf::Vector2f> ResourceManager::NearestResource(ResourceType type, 
   }
   if (bestRes) return bestRes->GetPosition();
   return std::nullopt;
-
 }
 
 void ResourceManager::ReserveResource(ResourceType type, sf::Vector2f pos) {
@@ -100,7 +108,6 @@ void ResourceManager::ReserveResource(ResourceType type, sf::Vector2f pos) {
     resources_visited_.push_back(*it);
   }
 }
-
 
 float ResourceManager::distance(sf::Vector2f a, sf::Vector2f b) {
   float dx = a.x - b.x;

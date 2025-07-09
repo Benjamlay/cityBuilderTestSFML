@@ -27,11 +27,6 @@ class TileMap : public game::ui::Clickable {
     WATER
 
 };
-  // enum resourceType {
-  //   EMPTY,
-  //   TREE,
-  //   ROCK
-  // };
 
   std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_;
   // std::array<Resource, kWidth/kPixelStep * kHeight/kPixelStep> resources_ = {};
