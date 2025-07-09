@@ -6,6 +6,7 @@
 #define MAPGENERATOR_H
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <span>
 
 #include "UI/clickable.h"
 #include "_assets/asset_manager.h"
@@ -51,7 +52,7 @@ public:
   static sf::Vector2f TilePos(sf::Vector2i);
   bool IsWalkable(sf::Vector2f pos);
 
-  std::vector<sf::Vector2f> &GetWalkables();
+  std::span<const sf::Vector2f> GetWalkables() const;
   std::vector<sf::Vector2f> &GetCollectablesTrees();
   std::vector<sf::Vector2f> &GetCollectablesRocks();
 

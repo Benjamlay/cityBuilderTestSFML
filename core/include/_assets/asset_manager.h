@@ -11,6 +11,9 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
 template <typename TAsset>
 class AssetManager {
 
@@ -22,7 +25,7 @@ public :
   explicit AssetManager(std::string_view folder);
   //void Load();
   void Load(const std::string& name, const std::string& path);
-  void Load_All();
+  void LoadAll();
   const TAsset& Get(int index);
   const TAsset& GetTexture(const std::string& name);
 
@@ -37,9 +40,18 @@ AssetManager<TAsset>::AssetManager(std::string_view folder): folder_(folder) {
 template <typename TAsset>
 void AssetManager<TAsset>::Load(const std::string& name, const std::string& path)
 {
-  if (!std::filesystem::exists(folder_)) {
-    return;
+  {
+#ifdef TRACY_ENABLE
+    ZoneNamedN(folder_exist_event,"Folder Exist", true);
+#endif // TRACY_ENABLE
+    if (!std::filesystem::exists(folder_)) {
+      return;
+    }
   }
+#ifdef TRACY_ENABLE
+  ZoneNamedN(load_asset_event,"Load Asset", true);
+  ZoneTextV(load_asset_event, name.data(), name.size());
+#endif // TRACY_ENABLE
   TAsset asset;
   if (!asset.loadFromFile(path)) {
     std::cerr << "Failed to load asset: " << path << std::endl;
@@ -51,8 +63,11 @@ void AssetManager<TAsset>::Load(const std::string& name, const std::string& path
 }
 
 template <typename TAsset>
-void AssetManager<TAsset>::Load_All()
+void AssetManager<TAsset>::LoadAll()
 {
+#ifdef TRACY_ENABLE
+  ZoneScoped;
+#endif // TRACY_ENABLE
   Load("empty", folder_ + "empty.png");
   Load("grass", folder_ + "grass.png");
   Load("grass2",folder_ + "grass2.png");

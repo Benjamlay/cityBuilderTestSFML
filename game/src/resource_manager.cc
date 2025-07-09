@@ -3,6 +3,10 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <ranges>
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
+
 ResourceManager::ResourceManager() : textures("../assets/textures/") {
   //
   textures.Load("empty", textures.folder_ + "empty.png");
@@ -23,6 +27,10 @@ void ResourceManager::RemoveRock(int amount) {rockStock -= amount;}
 
 void ResourceManager::Update(float dt) {
 
+#ifdef TRACY_ENABLE
+ZoneScoped;
+#endif // TRACY_ENABLE
+
   respawn_timer_ += dt;
   if (respawn_timer_ >= kRespawnInterval && !resources_visited_.empty()) {
     resources_.push_back(resources_visited_.front());
@@ -33,6 +41,9 @@ void ResourceManager::Update(float dt) {
 }
 
 void ResourceManager::Draw(sf::RenderWindow& window) {
+#ifdef TRACY_ENABLE
+  ZoneScoped;
+#endif // TRACY_ENABLE
   int resourceTileIndex = 0;
   sf::Sprite resourceSprite(textures.GetTexture("empty"));
 

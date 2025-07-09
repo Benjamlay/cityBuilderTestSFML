@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <queue>
+#include <span>
 
 using namespace core::motion;
 
@@ -54,7 +55,7 @@ namespace motion::Astar {
     return path;
   }
 
-  Path GetPath(sf::Vector2f start, sf::Vector2f end, std::vector<sf::Vector2f> walkableTiles){
+  Path GetPath(sf::Vector2f start, sf::Vector2f end, std::span<const sf::Vector2f> walkableTiles) {
     Path aStarPath;
 
     //Are start / end point in walkables tiles ?

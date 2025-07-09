@@ -23,7 +23,7 @@ class Npc {
   ResourceManager* resource_manager_;
   ResourceType type_;
 
-  TileMap* tileMap_;
+  const TileMap* tileMap_ = nullptr;
 
   static constexpr float kHungerRate = 2.5f;
   static constexpr float kChopingRate = 10.0f;
@@ -34,7 +34,8 @@ class Npc {
 public:
 
   explicit Npc();
-  void Setup(sf::Vector2f startPosition, TileMap* tileMap,  ResourceManager* resource_manager, ResourceType type);
+  void Setup(sf::Vector2f startPosition, const TileMap* tileMap,
+             ResourceManager* resource_manager, ResourceType type);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
   ResourceType getType() const { return type_;}

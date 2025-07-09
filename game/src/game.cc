@@ -7,6 +7,10 @@
 #include "UI/clickable.h"
 #include "resources/resource_manager.h"
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
+
 namespace
 {
   sf::RenderWindow window_;
@@ -33,10 +37,30 @@ namespace
 
 static void Setup()
 {
-  window_.create(sf::VideoMode({1000, 1000}), "City Builder");
+
+#ifdef TRACY_ENABLE
+  ZoneScoped;
+#endif // TRACY_ENABLE
+  // if (!std::filesystem::exists(textures.folder_)) {
+  //   throw std::runtime_error("Texture folder does not exist");
+  // }
+
+  {
+#ifdef TRACY_ENABLE
+    ZoneNamedN(window_creation_event,"Window Creation", true);
+#endif // TRACY_ENABLE
+    window_.create(sf::VideoMode({1000, 1000}), "City Builder");
+  }
   int mapSeed = 4345;
 
-  UIfont.openFromFile("C:/Windows/Fonts/arial.ttf");
+  {
+#ifdef TRACY_ENABLE
+    ZoneNamedN(load_font_event,"Load Font", true);
+#endif // TRACY_ENABLE
+    if (!UIfont.openFromFile("assets/fonts/BabyPlums.ttf")) {
+      throw std::runtime_error("Failed to load font");
+    }
+  }
   tilemap_ptr_->Setup(mapSeed, resource_manager.get());
 
   npc_manager_.Add({1024, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
@@ -45,6 +69,9 @@ static void Setup()
   npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager.get(), ROCK);
 
   tilemap_ptr_->OnReleasedRight = [] () {
+#ifdef TRACY_ENABLE
+    ZoneNamedN(right_click_event,"Right Click", true);
+#endif// TRACY_ENABLE
 
     sf::Vector2f spawnPoint = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), view);
 
@@ -55,8 +82,8 @@ static void Setup()
             TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
             tilemap_ptr_.get(), resource_manager.get(), TREE);
 
-        resource_manager->RemoveWood(5);
-        resource_manager->RemoveRock(5);}
+        resource_manager->RemoveWood(0);
+        resource_manager->RemoveRock(0);}
     }
   };
 
@@ -69,12 +96,20 @@ void game::run()
 
   while (window_.isOpen())
   {
+    #ifdef TRACY_ENABLE
+    ZoneNamedN(game_loop_event,"Game Loop", true);
+    #endif // TRACY_ENABLE
     dt = clock_.restart().asSeconds();
-    while (const std::optional event = window_.pollEvent()) {
-      HandleEvents(event);
-      //button.HandleEvent(event);
-      button2.HandleEvent(event);
-      tilemap_ptr_->HandleEvent(event);
+    {
+#ifdef TRACY_ENABLE
+      ZoneNamedN(event_handling_event,"Event Handling", true);
+#endif // TRACY_ENABLE
+      while (const std::optional event = window_.pollEvent()) {
+        HandleEvents(event);
+        //button.HandleEvent(event);
+        button2.HandleEvent(event);
+        tilemap_ptr_->HandleEvent(event);
+      }
     }
 
     window_.clear();
@@ -94,19 +129,29 @@ void game::run()
     woodText.setFont(UIfont);
     woodText.setString("Wood: " + std::to_string(resource_manager->GetWoodStock()));
     woodText.setCharacterSize(44);
-    woodText.setFillColor(sf::Color::Black);
-    woodText.setPosition({0, 0});
+    woodText.setFillColor(sf::Color::White);
+    woodText.setPosition({20, 20});
 
     rockText.setFont(UIfont);
     rockText.setString("Rock: " + std::to_string(resource_manager->GetRockStock()));
     rockText.setCharacterSize(44);
-    rockText.setFillColor(sf::Color::Black);
-    rockText.setPosition({0, 50});
+    rockText.setFillColor(sf::Color::White);
+    rockText.setPosition({20, 70});
 
     window_.draw(woodText);
     window_.draw(rockText);
     //display everything
-    window_.display();
+
+    {
+#ifdef TRACY_ENABLE
+      ZoneNamedN(display_event,"Display Event", true);
+#endif // TRACY_ENABLE
+      window_.display();
+    }
+    #ifdef TRACY_ENABLE
+    FrameMark;
+    #endif // TRACY_ENABLE
+
   }
 }
 
@@ -143,6 +188,6 @@ void game::HandleEvents(std::optional<sf::Event> event) {
   }
 }
 bool game::enoughMoneyForHouse() {
-  return resource_manager->GetWoodStock() > 5 && resource_manager->GetRockStock() > 5;
+  return resource_manager->GetWoodStock() > 0 && resource_manager->GetRockStock() > 0;
 }
 

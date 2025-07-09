@@ -1,5 +1,9 @@
 ﻿#include "../include/AI/npc.h"
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
+
 #include "ai/bt_sequence.h"
 #include "motion/a_star.h"
 
@@ -33,15 +37,13 @@ Status Npc::findResource() {
   if (!opt) return Status::kFailure;
 
   sf::Vector2f candidate = *opt;
-  Path path = motion::Astar::GetPath(motor_.GetPosition(),
-                                     candidate,
+  Path path = motion::Astar::GetPath(motor_.GetPosition(), candidate,
                                      tileMap_->GetWalkables());
   if (!path.IsValid()) {
     return Status::kFailure;
   }
 
   resource_manager_->ReserveResource(type_, candidate);
-
   destination_ = candidate;
   SetPath(path);
   return Status::kSuccess;
@@ -50,7 +52,8 @@ Status Npc::findResource() {
 
 Status Npc::findHome() {
   destination_ = start_position_;
-  Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_, tileMap_->GetWalkables());
+  Path path = motion::Astar::GetPath(motor_.GetPosition(), destination_,
+                                     tileMap_->GetWalkables());
 
   if (path.IsValid()) {
     SetPath(path);
@@ -127,8 +130,13 @@ void Npc::SetupBehaviourTree(){
   root_ = std::move(selector);
 }
 
-void Npc::Setup(sf::Vector2f startPosition, TileMap* tileMap, ResourceManager* resource_manager, ResourceType type)
+void Npc::Setup(sf::Vector2f startPosition, const TileMap* tileMap,
+                ResourceManager* resource_manager, ResourceType type)
 {
+#ifdef TRACY_ENABLE
+  ZoneScoped;
+#endif // TRACY_ENABLE
+
   textures.Load("treeGuy", textures.folder_ + "guy.png");
   textures.Load("rockGuy" , textures.folder_ + "StoneWorker.png");
   textures.Load("house", textures.folder_ + "house.png");

@@ -2,15 +2,15 @@
 #define A_STAR_H
 
 #include <SFML/System.hpp>
-#include <__msvc_filebuf.hpp>
-
+#include <span>
 #include "path.h"
 //using namespace core::motion;
 
 namespace motion {
   namespace Astar {
 
-      core::motion::Path GetPath(sf::Vector2f start, sf::Vector2f end, std::vector<sf::Vector2f> walkableTiles);
+      core::motion::Path GetPath(sf::Vector2f start, sf::Vector2f end,
+                             std::span<const sf::Vector2f> walkableTiles);
 
   }
 }

@@ -4,9 +4,15 @@
 #include <vector>
 
 #include "maths/perlin.h"
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
 
 void TileMap::Draw(sf::RenderWindow &window)
 {
+#ifdef TRACY_ENABLE
+  ZoneScoped;
+#endif // TRACY_ENABLE
   int tileIndex = 0;
 
   sf::Sprite sprite(textures.GetTexture("empty"));
@@ -69,8 +75,11 @@ TileMap::TileMap() : textures("../assets/textures/") {}
 
 
 void TileMap::Setup(int seed, ResourceManager *resources) {
+#ifdef TRACY_ENABLE
+  ZoneScoped;
+#endif // TRACY_ENABLE
   seed_ = seed;
-  textures.Load_All();
+  textures.LoadAll();
   Perlin perlin(seed_);
   std::vector noiseMap(kHeight/kPixelStep, std::vector<float>(kWidth/kPixelStep));
 
@@ -108,6 +117,6 @@ void TileMap::Setup(int seed, ResourceManager *resources) {
 
   SetZone(sf::IntRect({0, 0}, sf::Vector2i(kWidth, kHeight)));
 }
-std::vector<sf::Vector2f> &TileMap::GetWalkables() { return walkables_; }
+std::span<const sf::Vector2f> TileMap::GetWalkables() const { return walkables_; }
 std::vector<sf::Vector2f> &TileMap::GetCollectablesTrees() {return collectibles_trees_;}
 std::vector<sf::Vector2f> &TileMap::GetCollectablesRocks() {return collectibles_rocks_;}
