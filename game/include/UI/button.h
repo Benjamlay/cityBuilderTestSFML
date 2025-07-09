@@ -10,10 +10,10 @@ namespace game::ui {
 
 class Button : public Clickable {
   sf::RectangleShape shape_;
-  //sf::Text text_;
-
+  sf::Font UIfont;
+  sf::Text text_ = sf::Text(UIfont);
  public:
-  Button(sf::Vector2f position_);
+  Button(sf::Vector2f position_, std::string text_);
   void Draw(sf::RenderWindow& window);
 };
 }  // namespace game::ui

@@ -29,8 +29,9 @@ namespace
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
-  game::ui::Button button2({50, 800});
-  game::ui::Button button1({130, 800});
+  game::ui::Button button_add_tree_npc({50, 800}, "tree npc");
+  game::ui::Button button_add_rock_npc({200, 800}, "rock npc");
+  game::ui::Button button_add_flower_npc({400, 800}, "flower npc");
 
   auto resource_manager = std::make_unique<ResourceManager>();
 
@@ -84,8 +85,9 @@ static void Setup()
     }
   };
 
-  button2.OnReleasedLeft = [] () {npc_type = TREE;};
-  button1.OnReleasedLeft = [] () {npc_type = ROCK;};
+  button_add_tree_npc.OnReleasedLeft = [] () {npc_type = TREE;};
+  button_add_rock_npc.OnReleasedLeft = [] () {npc_type = ROCK;};
+  button_add_flower_npc.OnReleasedLeft = [] () {npc_type = FLOWER;};
 
   dt = 0.f;
 }
@@ -107,8 +109,9 @@ void game::run()
       while (const std::optional event = window_.pollEvent()) {
         HandleEvents(event);
         //button.HandleEvent(event);
-        button2.HandleEvent(event);
-        button1.HandleEvent(event);
+        button_add_tree_npc.HandleEvent(event);
+        button_add_rock_npc.HandleEvent(event);
+        button_add_flower_npc.HandleEvent(event);
         tilemap_ptr_->HandleEvent(event);
       }
     }
@@ -126,8 +129,9 @@ void game::run()
 
     //update UI
     window_.setView(UIview);
-    button2.Draw(window_);
-    button1.Draw(window_);
+    button_add_tree_npc.Draw(window_);
+    button_add_rock_npc.Draw(window_);
+    button_add_flower_npc.Draw(window_);
 
     woodText.setFont(UIfont);
     woodText.setString("Wood: " + std::to_string(resource_manager->GetWoodStock()));
