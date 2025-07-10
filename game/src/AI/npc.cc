@@ -151,6 +151,8 @@ void Npc::Setup(sf::Vector2f startPosition, const TileMap* tileMap,
   textures.Load("rockGuy" , textures.folder_ + "StoneWorker.png");
   textures.Load("house", textures.folder_ + "house.png");
   textures.Load("empty", textures.folder_ + "empty.png");
+  textures.Load("woodHouse", textures.folder_ + "WoodHouse.png");
+  textures.Load("rockHouse", textures.folder_ + "RockHouse.png");
   start_position_ = startPosition;
   hunger_ = 0;
   motor_.SetPosition(startPosition);
@@ -192,11 +194,11 @@ void Npc::Draw(sf::RenderWindow& window) {
   switch (type_) {
     case ROCK:
       GuySprite.setTexture(textures.GetTexture("rockGuy"));
-      HouseSprite.setTexture(textures.GetTexture("house"));
+      HouseSprite.setTexture(textures.GetTexture("rockHouse"));
       break;
     case TREE:
       GuySprite.setTexture(textures.GetTexture("treeGuy"));
-      HouseSprite.setTexture(textures.GetTexture("house"));
+      HouseSprite.setTexture(textures.GetTexture("woodHouse"));
       break;
       case FLOWER:
       GuySprite.setTexture(textures.GetTexture("treeGuy"));

@@ -28,13 +28,14 @@ namespace
   sf::Text woodText = sf::Text(UIfont, "Wood: 0");
   sf::Text rockText = sf::Text(UIfont, "Rock: 0");
   sf::Text flowerText = sf::Text(UIfont, "Flower: 0");
+  sf::RectangleShape score_background;
 
   game::ai::NpcManager npc_manager_;
   float dt;
   sf::Clock clock_;
-  game::ui::Button button_add_tree_npc({50, 800}, "tree npc");
-  game::ui::Button button_add_rock_npc({200, 800}, "rock npc");
-  game::ui::Button button_add_flower_npc({350, 800}, "flower npc");
+  game::ui::Button button_add_tree_npc({100, 800}, "tree npc");
+  game::ui::Button button_add_rock_npc({250, 800}, "rock npc");
+  game::ui::Button button_add_flower_npc({400, 800}, "flower npc");
 
   auto resource_manager = std::make_unique<ResourceManager>();
 
@@ -55,7 +56,7 @@ static void Setup()
 #ifdef TRACY_ENABLE
     ZoneNamedN(load_font_event,"Load Font", true);
 #endif // TRACY_ENABLE
-    if (!UIfont.openFromFile("assets/fonts/BabyPlums.ttf")) {
+    if (!UIfont.openFromFile("assets/fonts/TothePoint.ttf")) {
       throw std::runtime_error("Failed to load font");
     }
   }
@@ -94,6 +95,27 @@ static void Setup()
   button_add_rock_npc.OnReleasedLeft = [] () {npc_type = ROCK;};
   button_add_flower_npc.OnReleasedLeft = [] () {npc_type = FLOWER;};
 
+  woodText.setFont(UIfont);
+  woodText.setCharacterSize(44);
+  woodText.setFillColor(sf::Color::White);
+  woodText.setPosition({30, 30});
+
+  rockText.setFont(UIfont);
+  rockText.setCharacterSize(44);
+  rockText.setFillColor(sf::Color::White);
+  rockText.setPosition({30, 70});
+
+  flowerText.setFont(UIfont);
+  flowerText.setCharacterSize(44);
+  flowerText.setFillColor(sf::Color::White);
+  flowerText.setPosition({30, 110});
+
+  score_background.setSize({150, 150});
+  score_background.setFillColor(sf::Color::Black);
+  score_background.setPosition({10, 30});
+  score_background.setOutlineColor(sf::Color(205, 109, 0, 0.8));
+  score_background.setOutlineThickness(10);
+
   dt = 0.f;
 }
 
@@ -113,11 +135,12 @@ void game::run()
 #endif // TRACY_ENABLE
       while (const std::optional event = window_.pollEvent()) {
         HandleEvents(event);
-        //button.HandleEvent(event);
-        button_add_tree_npc.HandleEvent(event);
-        button_add_rock_npc.HandleEvent(event);
-        button_add_flower_npc.HandleEvent(event);
-        tilemap_ptr_->HandleEvent(event);
+
+        bool was_clicked = false;
+        button_add_tree_npc.HandleEvent(event, was_clicked);
+        button_add_rock_npc.HandleEvent(event, was_clicked);
+        button_add_flower_npc.HandleEvent(event, was_clicked);
+        tilemap_ptr_->HandleEvent(event, was_clicked);
       }
     }
 
@@ -138,25 +161,15 @@ void game::run()
     button_add_rock_npc.Draw(window_);
     button_add_flower_npc.Draw(window_);
 
-    woodText.setFont(UIfont);
+
     woodText.setString("Wood: " + std::to_string(resource_manager->GetWoodStock()));
-    woodText.setCharacterSize(44);
-    woodText.setFillColor(sf::Color::White);
-    woodText.setPosition({20, 20});
 
-    rockText.setFont(UIfont);
     rockText.setString("Rock: " + std::to_string(resource_manager->GetRockStock()));
-    rockText.setCharacterSize(44);
-    rockText.setFillColor(sf::Color::White);
-    rockText.setPosition({20, 70});
 
-    flowerText.setFont(UIfont);
     flowerText.setString("Flower: " + std::to_string(resource_manager->GetFlowerStock()));
-    flowerText.setCharacterSize(44);
-    flowerText.setFillColor(sf::Color::White);
-    flowerText.setPosition({20, 120});
 
 
+    window_.draw(score_background);
     window_.draw(woodText);
     window_.draw(rockText);
     window_.draw(flowerText);
@@ -171,7 +184,6 @@ void game::run()
     #ifdef TRACY_ENABLE
     FrameMark;
     #endif // TRACY_ENABLE
-
   }
 }
 

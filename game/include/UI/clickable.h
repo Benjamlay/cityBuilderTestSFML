@@ -13,7 +13,7 @@ class Clickable {
   bool isHover_ = false;
 
 public:
-  void HandleEvent(std::optional<sf::Event> evt);
+  void HandleEvent(std::optional<sf::Event> evt, bool& was_clicked);
   void SetZone(sf::IntRect zone);
 
   std::function<void()> OnReleasedLeft;

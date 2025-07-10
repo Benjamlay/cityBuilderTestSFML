@@ -5,30 +5,36 @@
 
 namespace game::ui {
 
-void Clickable::HandleEvent(std::optional<sf::Event> evt){
+void Clickable::HandleEvent(std::optional<sf::Event> evt, bool& was_clicked){
 
   const auto released = evt->getIf<sf::Event::MouseButtonReleased>();
-  if (released) {
+  if (released && !was_clicked) {
     if (zone_.contains(released->position)) {
       if (released->button == sf::Mouse::Button::Left) {
-        if (OnReleasedLeft) OnReleasedLeft();
+        if (OnReleasedLeft) {
+          OnReleasedLeft();
+          was_clicked |= true;
+        }
       }
 
       if (released->button == sf::Mouse::Button::Right) {
-        if (OnReleasedRight) OnReleasedRight();
+        if (OnReleasedRight) {
+          OnReleasedRight();
+          was_clicked |= true;
+        }
       }
     }
   }
 
   const auto pressed = evt->getIf<sf::Event::MouseButtonPressed>();
-  if (pressed) {
+  if (pressed && !was_clicked) {
     if (zone_.contains(pressed->position)) {
       if (pressed->button == sf::Mouse::Button::Left) {
-        if (OnPressedLeft) OnPressedLeft();
+        if (OnPressedLeft){ OnPressedLeft(); was_clicked |= true;}
       }
 
       if (pressed->button == sf::Mouse::Button::Right) {
-        if (OnPressedRight) OnPressedRight();
+        if (OnPressedRight){ OnPressedRight();was_clicked |= true;}
       }
     }
   }
