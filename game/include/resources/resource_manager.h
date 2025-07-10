@@ -18,7 +18,7 @@ class ResourceManager {
   std::vector<Resource> resources_visited_;
 
   float respawn_timer_ = 0.f;
-  static constexpr float kRespawnInterval = 30.f;
+  static constexpr float kRespawnInterval = 10.f;
 
 public:
   ResourceManager();
