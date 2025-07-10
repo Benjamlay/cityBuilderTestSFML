@@ -23,6 +23,10 @@ Status Npc::Eat() {
 
   if (hunger_ <= 0){
     is_eating_ = false;
+    if (type_ == FLOWER) {
+      resource_manager_->flowerStock -= 2;
+      return Status::kSuccess;
+    }
     resource_manager_->flowerStock -= 5;
     return Status::kSuccess;
   }
@@ -146,6 +150,7 @@ void Npc::Setup(sf::Vector2f startPosition, const TileMap* tileMap,
   textures.Load("treeGuy", textures.folder_ + "guy.png");
   textures.Load("rockGuy" , textures.folder_ + "StoneWorker.png");
   textures.Load("house", textures.folder_ + "house.png");
+  textures.Load("empty", textures.folder_ + "empty.png");
   start_position_ = startPosition;
   hunger_ = 0;
   motor_.SetPosition(startPosition);
@@ -175,36 +180,41 @@ void Npc::Update(float dt)
       motor_.SetDestination(path_.GetNextPoint());
     }
   }
-  if (hunger_ >= 180) {
+  if (hunger_ >= 180 && !is_dead) {
     is_dead = true;
   }
 }
 
 void Npc::Draw(sf::RenderWindow& window) {
 
-  sf::Sprite GuySprite(textures.GetTexture("rockGuy"));
-
+  sf::Sprite GuySprite(textures.GetTexture("empty"));
+  sf::Sprite HouseSprite(textures.GetTexture("empty"));
   switch (type_) {
     case ROCK:
       GuySprite.setTexture(textures.GetTexture("rockGuy"));
+      HouseSprite.setTexture(textures.GetTexture("house"));
       break;
     case TREE:
       GuySprite.setTexture(textures.GetTexture("treeGuy"));
+      HouseSprite.setTexture(textures.GetTexture("house"));
       break;
       case FLOWER:
       GuySprite.setTexture(textures.GetTexture("treeGuy"));
+      HouseSprite.setTexture(textures.GetTexture("house"));
+      break;
+      case EMPTY:
       break;
       default:
       break;
   }
 
-  sf::Sprite HouseSprite(textures.GetTexture("house"));
-  GuySprite.setPosition(motor_.GetPosition());
-  HouseSprite.setPosition(start_position_);
-  window.draw(GuySprite);
-  window.draw(HouseSprite);
+  if (!type_ == EMPTY) {
+    GuySprite.setPosition(motor_.GetPosition());
+    HouseSprite.setPosition(start_position_);
+    window.draw(GuySprite);
+    window.draw(HouseSprite);
+  }
 }
-
 
 void Npc::SetPath(const Path& path){
   path_ = path;

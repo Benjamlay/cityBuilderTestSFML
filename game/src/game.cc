@@ -13,6 +13,9 @@
 
 namespace
 {
+  constexpr int HouseCostInWood = 5;
+  constexpr int HouseCostInRock = 5;
+
   sf::RenderWindow window_;
   sf::View view = window_.getDefaultView();
   sf::View UIview = window_.getDefaultView();
@@ -31,7 +34,7 @@ namespace
   sf::Clock clock_;
   game::ui::Button button_add_tree_npc({50, 800}, "tree npc");
   game::ui::Button button_add_rock_npc({200, 800}, "rock npc");
-  game::ui::Button button_add_flower_npc({400, 800}, "flower npc");
+  game::ui::Button button_add_flower_npc({350, 800}, "flower npc");
 
   auto resource_manager = std::make_unique<ResourceManager>();
 
@@ -60,12 +63,11 @@ static void Setup()
 
   npc_manager_.Add({1024, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
   npc_manager_.Add({256, 1024},tilemap_ptr_.get(), resource_manager.get(), ROCK);
-  npc_manager_.Add({256, 256},tilemap_ptr_.get(), resource_manager.get(), TREE);
-  npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager.get(), ROCK);
-  npc_manager_.Add({224, 224},tilemap_ptr_.get(), resource_manager.get(), FLOWER);
 
-  resource_manager->SetFlower(0);
-  tilemap_ptr_->OnReleasedRight = [] () {
+  resource_manager->SetFlower(30);
+  resource_manager->SetRock(5);
+  resource_manager->SetWood(5);
+  tilemap_ptr_->OnReleasedLeft = [] () {
 #ifdef TRACY_ENABLE
     ZoneNamedN(right_click_event,"Right Click", true);
 #endif// TRACY_ENABLE
@@ -79,9 +81,12 @@ static void Setup()
             TileMap::TilePos(static_cast<sf::Vector2i>(spawnPoint)),
             tilemap_ptr_.get(), resource_manager.get(), npc_type);
 
-        resource_manager->RemoveWood(0);
-        resource_manager->RemoveRock(0);}
-      npc_type = EMPTY;
+        if (!npc_type == EMPTY) {
+          resource_manager->RemoveWood(HouseCostInWood);
+          resource_manager->RemoveRock(HouseCostInRock);}
+        npc_type = EMPTY;
+        }
+
     }
   };
 
@@ -176,13 +181,13 @@ void game::HandleEvents(std::optional<sf::Event> event) {
   }
 
   if (const auto mouseClick = event->getIf<sf::Event::MouseButtonPressed>()) {
-    if (mouseClick->button == sf::Mouse::Button::Left) {
+    if (mouseClick->button == sf::Mouse::Button::Right) {
       dragging_ = true;
       lastMousePos = sf::Mouse::getPosition(window_);
     }
   }
   if (const auto mouseClick = event->getIf<sf::Event::MouseButtonReleased>()) {
-    if (mouseClick->button == sf::Mouse::Button::Left) {
+    if (mouseClick->button == sf::Mouse::Button::Right) {
       dragging_ = false;
     }
   }
@@ -203,6 +208,6 @@ void game::HandleEvents(std::optional<sf::Event> event) {
   }
 }
 bool game::EnoughMoneyForHouse() {
-  return resource_manager->GetWoodStock() > 0 && resource_manager->GetRockStock() > 0;
+  return resource_manager->GetWoodStock() >= HouseCostInWood && resource_manager->GetRockStock() >= HouseCostInRock;
 }
 

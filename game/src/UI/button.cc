@@ -3,7 +3,7 @@
 #include <iostream>
 game::ui::Button::Button(sf::Vector2f position_, std::string text) {
 
-  if (!UIfont.openFromFile("assets/fonts/BabyPlums.ttf")) {
+  if (!UIfont.openFromFile("assets/fonts/TothePoint.ttf")) {
     throw std::runtime_error("Failed to load font");
   }
   shape_.setSize(sf::Vector2f(90, 50));
@@ -14,9 +14,9 @@ game::ui::Button::Button(sf::Vector2f position_, std::string text) {
   shape_.setOrigin({shape_.getSize().x/2, shape_.getSize().y/2});
 
   text_.setString(text);
-  text_.setPosition({shape_.getPosition().x, shape_.getPosition().y});
+  text_.setPosition({shape_.getPosition().x - 30, shape_.getPosition().y -25});
   text_.setFillColor(sf::Color::White);
-  text_.setCharacterSize(10);
+  text_.setCharacterSize(30);
   SetZone({static_cast<sf::IntRect>(shape_.getGlobalBounds())});
 
   OnHoverEnter = [this] () {shape_.setScale({1.2f, 1.2f});

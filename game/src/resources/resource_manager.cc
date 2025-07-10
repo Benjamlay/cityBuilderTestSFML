@@ -27,7 +27,9 @@ void ResourceManager::AddFlower(sf::Vector2f pos) {
 void ResourceManager::RemoveWood(int amount) {woodStock -= amount;}
 void ResourceManager::RemoveRock(int amount) { rockStock -= amount; }
 void ResourceManager::RemoveFlower(int amount) { flowerStock -= amount; }
-void ResourceManager::SetFlower(int amount) {flowerStock = amount;}
+void ResourceManager::SetFlower(int amount) { flowerStock = amount; }
+void ResourceManager::SetWood(int amount) {woodStock = amount;}
+void ResourceManager::SetRock(int amount) {rockStock = amount;}
 
 void ResourceManager::Update(float dt) {
 

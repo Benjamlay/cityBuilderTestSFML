@@ -18,7 +18,7 @@ class ResourceManager {
   std::vector<Resource> resources_visited_;
 
   float respawn_timer_ = 0.f;
-  static constexpr float kRespawnInterval = 120.f;
+  static constexpr float kRespawnInterval = 30.f;
 
 public:
   ResourceManager();
@@ -36,6 +36,8 @@ public:
   void RemoveRock(int amount);
   void RemoveFlower(int amount);
   void SetFlower(int amount);
+  void SetWood(int amount);
+  void SetRock(int amount);
 
   static float distance(sf::Vector2f a, sf::Vector2f b);
   std::optional<sf::Vector2f> NearestResource(ResourceType type, sf::Vector2f position);

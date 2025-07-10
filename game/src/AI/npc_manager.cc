@@ -19,6 +19,10 @@ void NpcManager::Update(float dt)
 #ifdef TRACY_ENABLE
   ZoneScoped;
 #endif // TRACY_ENABLE
+  npcs_.erase(std::remove_if(npcs_.begin(), npcs_.end(),[](const std::unique_ptr<Npc>& npc){
+        return npc->is_dead;}),npcs_.end()
+  );
+
   for (auto& npc : npcs_)
   {
     npc->Update(dt);
@@ -29,11 +33,6 @@ void NpcManager::Draw(sf::RenderWindow& window) {
 #ifdef TRACY_ENABLE
   ZoneScoped;
 #endif // TRACY_ENABLE
-
-  npcs_.erase(std::remove_if(npcs_.begin(), npcs_.end(),[](const std::unique_ptr<Npc>& npc){
-        return npc->is_dead;}),npcs_.end()
-  );
-
   for (auto& npc : npcs_) {
     npc->Draw(window);
   }
