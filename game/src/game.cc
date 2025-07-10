@@ -28,7 +28,9 @@ namespace
   sf::Text woodText = sf::Text(UIfont, "Wood: 0");
   sf::Text rockText = sf::Text(UIfont, "Rock: 0");
   sf::Text flowerText = sf::Text(UIfont, "Flower: 0");
+  sf::Text npcPriceText = sf::Text(UIfont, "npc price : 5 woods + 5 rocks");
   sf::RectangleShape score_background;
+  sf::RectangleShape price_background;
 
   game::ai::NpcManager npc_manager_;
   float dt;
@@ -113,8 +115,14 @@ static void Setup()
   score_background.setSize({150, 150});
   score_background.setFillColor(sf::Color::Black);
   score_background.setPosition({10, 30});
-  score_background.setOutlineColor(sf::Color(205, 109, 0, 0.8));
-  score_background.setOutlineThickness(10);
+
+  price_background.setSize({320, 60});
+  price_background.setFillColor(sf::Color::Black);
+  price_background.setPosition({660, 35});
+  npcPriceText.setFont(UIfont);
+  npcPriceText.setCharacterSize(44);
+  npcPriceText.setFillColor(sf::Color::White);
+  npcPriceText.setPosition({680, 30});
 
   dt = 0.f;
 }
@@ -170,6 +178,8 @@ void game::run()
 
 
     window_.draw(score_background);
+    window_.draw(price_background);
+    window_.draw(npcPriceText);
     window_.draw(woodText);
     window_.draw(rockText);
     window_.draw(flowerText);
