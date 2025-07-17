@@ -13,8 +13,8 @@
 
 namespace
 {
-  constexpr int HouseCostInWood = 5;
-  constexpr int HouseCostInRock = 5;
+  constexpr int HouseCostInWood = 0;
+  constexpr int HouseCostInRock = 0;
 
   sf::RenderWindow window_;
   sf::View view = window_.getDefaultView();

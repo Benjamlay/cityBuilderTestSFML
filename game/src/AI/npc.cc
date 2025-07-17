@@ -42,21 +42,33 @@ Status Npc::Eat() {
 
 Status Npc::findResource() {
 
+  resource_search_cooldown_ = std::max(0.f, resource_search_cooldown_ - dt_);
+
   auto opt = resource_manager_->NearestResource(type_, motor_.GetPosition());
   if (!opt) return Status::kFailure;
 
   sf::Vector2f candidate = *opt;
+
+  if (candidate == last_destination_) {
+    if (resource_search_cooldown_ > 0.f)
+      return Status::kFailure;
+  }
+
   Path path = motion::Astar::GetPath(motor_.GetPosition(), candidate,
                                      tileMap_->GetWalkables());
   if (!path.IsValid()) {
+    last_destination_ = candidate;
+    resource_search_cooldown_ = kResourceSearchInterval;
+
     return Status::kFailure;
   }
 
   resource_manager_->ReserveResource(type_, candidate);
   destination_ = candidate;
+  last_destination_ = candidate;
   SetPath(path);
+  resource_search_cooldown_ = kResourceSearchInterval;
   return Status::kSuccess;
-
 }
 
 Status Npc::findHome() {
@@ -173,9 +185,11 @@ void Npc::Update(float dt)
   if (!is_eating_) {
     hunger_ += kHungerRate * dt_;
   }
+
   if (is_choping) {
     choping_timer_-= kChopingRate * dt_;
   }
+
   if (path_.IsValid()){
     motor_.Update(dt);
     if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {

@@ -7,3 +7,4 @@ add_library(game ${SRC_FILES} ${HEADER_FILES})
 
 target_include_directories(game PUBLIC include/)
 target_link_libraries(game PUBLIC core SFML::System SFML::Graphics SFML::Window)
+

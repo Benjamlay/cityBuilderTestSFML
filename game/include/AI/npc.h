@@ -26,8 +26,8 @@ class Npc {
   const TileMap* tileMap_ = nullptr;
 
   static constexpr float kHungerRate = 2.5f;
-  static constexpr float kChopingRate = 10.0f;
-  static constexpr float kMovingSpeed = 50.0f;
+  static constexpr float kChopingRate = 20.0f;
+  static constexpr float kMovingSpeed = 80.0f;
 
   float dt_;
 
@@ -36,6 +36,7 @@ public:
   explicit Npc();
   void Setup(sf::Vector2f startPosition, const TileMap* tileMap,
              ResourceManager* resource_manager, ResourceType type);
+  
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
   ResourceType getType() const { return type_;}
@@ -57,6 +58,10 @@ public:
   bool is_choping = false;
   bool is_dead = false;
   sf::Vector2f destination_;
+  sf::Vector2f last_destination_ = sf::Vector2f(0,0);
+  float resource_search_cooldown_ = 0.f;
+  static constexpr float kResourceSearchInterval = 1.f;
+
   sf::Vector2f start_position_;
   //std::vector<sf::Vector2f> ressources_;
 
