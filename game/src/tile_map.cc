@@ -71,7 +71,7 @@ bool TileMap::IsWalkable(sf::Vector2f pos) {
 }
 
 
-TileMap::TileMap() : textures("../assets/textures/") {}
+TileMap::TileMap() : textures("assets/textures/") {}
 
 
 void TileMap::Setup(int seed, ResourceManager *resources) {
