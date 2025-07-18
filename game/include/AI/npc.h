@@ -60,7 +60,7 @@ public:
   sf::Vector2f destination_;
   sf::Vector2f last_destination_ = sf::Vector2f(0,0);
   float resource_search_cooldown_ = 0.f;
-  static constexpr float kResourceSearchInterval = 1.f;
+  static constexpr float kResourceSearchInterval = 5.f;
 
   sf::Vector2f start_position_;
   //std::vector<sf::Vector2f> ressources_;

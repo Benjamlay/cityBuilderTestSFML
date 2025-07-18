@@ -61,13 +61,11 @@ namespace motion::Astar {
     //Are start / end point in walkables tiles ?
     auto f = std::find(walkableTiles.begin(), walkableTiles.end(), start);
     if (f == walkableTiles.end()) {
-      std::cout << "Start point not in walkable tiles" << std::endl;
       return aStarPath;
     }
 
     auto g = std::find(walkableTiles.begin(), walkableTiles.end(), end);
     if (g == walkableTiles.end()) {
-      std::cout << "End point not in walkable tiles" << std::endl;
       return aStarPath;
     }
 

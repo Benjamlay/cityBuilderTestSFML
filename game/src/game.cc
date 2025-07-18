@@ -13,8 +13,8 @@
 
 namespace
 {
-  constexpr int HouseCostInWood = 0;
-  constexpr int HouseCostInRock = 0;
+  constexpr int HouseCostInWood = 5;
+  constexpr int HouseCostInRock = 5;
 
   sf::RenderWindow window_;
   sf::View view = window_.getDefaultView();
@@ -92,6 +92,7 @@ static void Setup()
 
     }
   };
+
 
   button_add_tree_npc.OnReleasedLeft = [] () {npc_type = TREE;};
   button_add_rock_npc.OnReleasedLeft = [] () {npc_type = ROCK;};
