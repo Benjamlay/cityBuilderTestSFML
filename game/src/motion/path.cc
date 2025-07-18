@@ -1,7 +1,5 @@
 ﻿#include "motion/path.h"
 
-#include <__msvc_ostream.hpp>
-#include <iostream>
 
 bool core::motion::Path::IsDone() const {
   return idxPoint_ == path_points_.size() -1;

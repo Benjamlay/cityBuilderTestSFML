@@ -7,7 +7,7 @@
 #include "ai/bt_sequence.h"
 #include "motion/a_star.h"
 
-Npc::Npc() : textures("../assets/iaTextures/") {}
+Npc::Npc() : textures("assets/iaTextures/") {}
 
 Status Npc::Move() {
 

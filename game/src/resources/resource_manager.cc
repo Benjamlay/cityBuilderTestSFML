@@ -7,7 +7,7 @@
 #include <tracy/Tracy.hpp>
 #endif // TRACY_ENABLE
 
-ResourceManager::ResourceManager() : textures("../assets/textures/") {
+ResourceManager::ResourceManager() : textures("assets/textures/") {
   //
   textures.Load("empty", textures.folder_ + "empty.png");
   textures.Load("tree", textures.folder_ + "tree.png");
