@@ -27,7 +27,7 @@ namespace
   sf::Font UIfont;
   sf::Text woodText = sf::Text(UIfont, "Wood: 0");
   sf::Text rockText = sf::Text(UIfont, "Rock: 0");
-  sf::Text flowerText = sf::Text(UIfont, "Flower: 0");
+  sf::Text flowerText = sf::Text(UIfont, "Food: 0");
   sf::Text npcPriceText = sf::Text(UIfont, "npc price : 5 woods + 5 rocks");
   sf::RectangleShape score_background;
   sf::RectangleShape price_background;
@@ -37,7 +37,7 @@ namespace
   sf::Clock clock_;
   game::ui::Button button_add_tree_npc({100, 800}, "tree npc");
   game::ui::Button button_add_rock_npc({250, 800}, "rock npc");
-  game::ui::Button button_add_flower_npc({400, 800}, "flower npc");
+  game::ui::Button button_add_flower_npc({400, 800}, "food npc");
 
   auto resource_manager = std::make_unique<ResourceManager>();
 
@@ -175,7 +175,7 @@ void game::run()
 
     rockText.setString("Rock: " + std::to_string(resource_manager->GetRockStock()));
 
-    flowerText.setString("Flower: " + std::to_string(resource_manager->GetFlowerStock()));
+    flowerText.setString("Food: " + std::to_string(resource_manager->GetFlowerStock()));
 
 
     window_.draw(score_background);
